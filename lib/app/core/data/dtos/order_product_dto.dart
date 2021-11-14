@@ -1,5 +1,5 @@
-class ProductDTO {
-  ProductDTO({
+class OrderProductDTO {
+  OrderProductDTO({
     required this.id,
     required this.quantity,
   });

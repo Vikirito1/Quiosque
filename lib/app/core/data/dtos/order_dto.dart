@@ -1,4 +1,4 @@
-import 'package:quiosque/app/core/data/dtos/product_dto.dart';
+import 'package:quiosque/app/core/data/dtos/order_product_dto.dart';
 
 class OrderDTO {
   OrderDTO({
@@ -11,5 +11,5 @@ class OrderDTO {
   final int? id;
   final int tableNumber;
   final bool status;
-  final List<ProductDTO> products;
+  final List<OrderProductDTO> products;
 }
