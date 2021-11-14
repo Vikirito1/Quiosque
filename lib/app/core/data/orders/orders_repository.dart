@@ -32,7 +32,7 @@ class OrdersRepository implements IOrdersRepository {
         .toList();
     for (var order in allOrders) {
       final productsResult = await connection.rawQuery(''' 
-        SELECT id, product, price
+        SELECT id, product, price, ohp.quantity AS quantity
         FROM products
         JOIN orders_has_products as ohp ON ohp.products_id = id
         WHERE ohp.orders_id = ?;
