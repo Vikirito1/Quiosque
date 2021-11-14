@@ -23,7 +23,11 @@ class DbConnection {
       products_id INTEGER NOT NULL,
       quantity INTEGER NOT NULL,
       FOREIGN KEY (orders_id) REFERENCES orders(id),
+      ON UPDATE CASCADE
+      ON DELETE CASCADE
       FOREIGN KEY (products_id) REFERENCES products(id)
+      ON UPDATE CASCADE
+      ON DELETE CASCADE
     );
   ''';
 
