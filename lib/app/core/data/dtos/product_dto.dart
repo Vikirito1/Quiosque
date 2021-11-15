@@ -1,8 +1,8 @@
 class ProductDTO {
   ProductDTO({
     this.id,
-    this.product,
-    this.price,
+    required this.product,
+    required this.price,
   });
 
   final int? id;
