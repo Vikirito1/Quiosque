@@ -29,14 +29,11 @@ class ProductRepository implements IProductRepository {
   @override
   Future<int> createProduct(ProductDTO productDTO) async {
     final Database connection = await _connection.openConnection();
-    late int productId;
-    await connection.transaction((txn) async {
-      productId = await txn
-          .rawInsert('INSERT INTO products(product, price) Values (?, ?)', [
-        productDTO.product,
-        productDTO.price,
-      ]);
-    });
+    final int productId = await connection
+        .rawInsert('INSERT INTO products(product, price) VALUES (?, ?)', [
+      productDTO.product,
+      productDTO.price,
+    ]);
     return productId;
   }
 
@@ -51,18 +48,15 @@ class ProductRepository implements IProductRepository {
   @override
   Future<int> updateProduct(ProductDTO updateProduct) async {
     final Database connection = await _connection.openConnection();
-    late int updatedProductsCount;
-    await connection.transaction((txn) async {
-      updatedProductsCount = await txn.rawUpdate(''' 
+    final int updatedProductsCount = await connection.rawUpdate(''' 
         UPDATE products
         SET product = ?, price = ?
         WHERE id = ?
       ''', [
-        updateProduct.product,
-        updateProduct.price,
-        updateProduct.id,
-      ]);
-    });
+      updateProduct.product,
+      updateProduct.price,
+      updateProduct.id,
+    ]);
     return updatedProductsCount;
   }
 }
