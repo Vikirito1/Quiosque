@@ -1,5 +1,7 @@
+import 'package:injectable/injectable.dart';
 import 'package:sqflite/sqflite.dart';
 
+@LazySingleton()
 class DbConnection {
   static const String _productsTableQuery = '''
     CREATE TABLE IF NOT EXISTS products (
