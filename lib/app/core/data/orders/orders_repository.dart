@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:quiosque/app/core/data/dtos/order_dto.dart';
 import 'package:quiosque/app/core/data/orders/i_orders_repository.dart';
 import 'package:quiosque/app/core/database/db_connection.dart';
@@ -5,6 +6,7 @@ import 'package:quiosque/app/core/models/order_model.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:sqflite/sqflite.dart';
 
+@LazySingleton(as: IOrdersRepository)
 class OrdersRepository implements IOrdersRepository {
   OrdersRepository(this._connection);
 

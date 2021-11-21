@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:quiosque/app/core/data/dtos/product_dto.dart';
 import 'package:quiosque/app/core/database/db_connection.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
@@ -5,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'i_product_repository.dart';
 
+@LazySingleton(as: IProductRepository)
 class ProductRepository implements IProductRepository {
   ProductRepository(this._connection);
 
