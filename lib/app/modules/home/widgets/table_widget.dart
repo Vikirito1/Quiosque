@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:quiosque/app/core/models/order_model.dart';
 
 class TableWidget extends StatelessWidget {
   const TableWidget({
     Key? key,
     required this.tableNumber,
     this.onTableSelected,
+    this.orderModel,
   }) : super(key: key);
 
   final int tableNumber;
   final Function()? onTableSelected;
+  final OrderModel? orderModel;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class TableWidget extends StatelessWidget {
           image: const DecorationImage(
             image: AssetImage('images/mesa_v.png'),
           ),
-          color: Colors.blueAccent,
+          color: orderModel == null ? Colors.redAccent : Colors.greenAccent,
           border: Border.all(width: 3.0),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
