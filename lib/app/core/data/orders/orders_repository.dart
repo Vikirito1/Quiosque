@@ -18,7 +18,7 @@ class OrdersRepository implements IOrdersRepository {
     final orderResults = await connection.rawQuery(''' 
       SELECT o.id as id,
       o.table_number as table_number,
-      o.status as status,
+      o.status as status
       FROM orders as o 
       ''');
 
@@ -105,5 +105,41 @@ class OrdersRepository implements IOrdersRepository {
       }
     });
     return updatedOrdersCount;
+  }
+
+  @override
+  Future<List<OrderModel>> getActiveOrders() async {
+    final Database connection = await _connection.openConnection();
+    final orderResults = await connection.rawQuery(''' 
+      SELECT o.id as id,
+      o.table_number as table_number,
+      o.status as status
+      FROM orders as o 
+      WHERE o.status = ?
+      ''', [1]);
+
+    List<OrderModel> allActiveOrders = orderResults
+        .map(
+          (orderMap) => OrderModel(
+            id: orderMap['id'] as int,
+            tableNumber: orderMap['table_number'] as int,
+            status: (orderMap['status'] as int) == 1,
+            productsOrdered: [],
+          ),
+        )
+        .toList();
+    for (var order in allActiveOrders) {
+      final productsResult = await connection.rawQuery(''' 
+        SELECT id, product, price, ohp.quantity AS quantity
+        FROM products
+        JOIN orders_has_products as ohp ON ohp.products_id = id
+        WHERE ohp.orders_id = ?;
+      ''', [order.id]);
+      final orderProducts = productsResult
+          .map((productMap) => ProductModel.fromMap(productMap))
+          .toList();
+      order.productsOrdered.addAll(orderProducts);
+    }
+    return allActiveOrders;
   }
 }

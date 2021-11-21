@@ -6,4 +6,5 @@ abstract class IOrdersRepository {
   Future<int> createOrder(OrderDTO orderDTO);
   Future<int> updateOrder(OrderDTO updatedOrder);
   Future<int> deleteOrder(int orderId);
+  Future<List<OrderModel>> getActiveOrders();
 }
