@@ -1,5 +1,7 @@
+import 'package:injectable/injectable.dart';
 import 'package:sqflite/sqflite.dart';
 
+@LazySingleton()
 class DbConnection {
   static const String _productsTableQuery = '''
     CREATE TABLE IF NOT EXISTS products (
@@ -22,7 +24,7 @@ class DbConnection {
       orders_id INTEGER NOT NULL,
       products_id INTEGER NOT NULL,
       quantity INTEGER NOT NULL,
-      FOREIGN KEY (orders_id) REFERENCES orders(id),
+      FOREIGN KEY (orders_id) REFERENCES orders(id)
       ON UPDATE CASCADE
       ON DELETE CASCADE
       FOREIGN KEY (products_id) REFERENCES products(id)
@@ -36,6 +38,7 @@ class DbConnection {
     final String path = '$databasesPath/quiosque.db';
     final Database database = await openDatabase(
       path,
+      version: 1,
       singleInstance: true,
       onCreate: (Database db, int version) async {
         await db.execute(_productsTableQuery);
