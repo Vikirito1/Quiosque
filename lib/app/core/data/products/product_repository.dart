@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:quiosque/app/core/data/dtos/product_dto.dart';
 import 'package:quiosque/app/core/database/db_connection.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
+import 'package:quiosque/app/core/utils/sqflite_exception_handler.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'i_product_repository.dart';
@@ -14,12 +15,16 @@ class ProductRepository implements IProductRepository {
 
   @override
   Future<List<ProductModel>> getAllProducts() async {
-    final Database connection = await _connection.openConnection();
-    final results =
-        await connection.rawQuery('SELECT id, product, price FROM products');
-    return results
-        .map((productMap) => ProductModel.fromMap(productMap))
-        .toList();
+    try {
+      final Database connection = await _connection.openConnection();
+      final results =
+          await connection.rawQuery('SELECT id, product, price FROM products');
+      return results
+          .map((productMap) => ProductModel.fromMap(productMap))
+          .toList();
+    } on DatabaseException catch (e) {
+      throw SqfliteExceptionHandler.handleException(e);
+    }
   }
 
   @override
@@ -30,35 +35,47 @@ class ProductRepository implements IProductRepository {
 
   @override
   Future<int> createProduct(ProductDTO productDTO) async {
-    final Database connection = await _connection.openConnection();
-    final int productId = await connection
-        .rawInsert('INSERT INTO products(product, price) VALUES (?, ?)', [
-      productDTO.product,
-      productDTO.price,
-    ]);
-    return productId;
+    try {
+      final Database connection = await _connection.openConnection();
+      final int productId = await connection
+          .rawInsert('INSERT INTO products(product, price) VALUES (?, ?)', [
+        productDTO.product,
+        productDTO.price,
+      ]);
+      return productId;
+    } on DatabaseException catch (e) {
+      throw SqfliteExceptionHandler.handleException(e);
+    }
   }
 
   @override
   Future<int> deleteProduct(int productId) async {
-    final Database connection = await _connection.openConnection();
-    final deleteLinesCount = await connection
-        .rawDelete('DELETE FROM products WHERE id = ?', [productId]);
-    return deleteLinesCount;
+    try {
+      final Database connection = await _connection.openConnection();
+      final deleteLinesCount = await connection
+          .rawDelete('DELETE FROM products WHERE id = ?', [productId]);
+      return deleteLinesCount;
+    } on DatabaseException catch (e) {
+      throw SqfliteExceptionHandler.handleException(e);
+    }
   }
 
   @override
   Future<int> updateProduct(ProductDTO updateProduct) async {
-    final Database connection = await _connection.openConnection();
-    final int updatedProductsCount = await connection.rawUpdate(''' 
+    try {
+      final Database connection = await _connection.openConnection();
+      final int updatedProductsCount = await connection.rawUpdate(''' 
         UPDATE products
         SET product = ?, price = ?
         WHERE id = ?
       ''', [
-      updateProduct.product,
-      updateProduct.price,
-      updateProduct.id,
-    ]);
-    return updatedProductsCount;
+        updateProduct.product,
+        updateProduct.price,
+        updateProduct.id,
+      ]);
+      return updatedProductsCount;
+    } on DatabaseException catch (e) {
+      throw SqfliteExceptionHandler.handleException(e);
+    }
   }
 }
