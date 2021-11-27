@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
 import '../../modules/home/home_controller.dart' as _i4;
+import '../../modules/splash/splash_controller.dart' as _i11;
 import '../data/orders/i_orders_repository.dart' as _i5;
 import '../data/orders/orders_repository.dart' as _i6;
 import '../data/products/i_product_repository.dart' as _i7;
@@ -32,5 +33,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       () => _i9.OrdersStore(get<_i5.IOrdersRepository>()));
   gh.lazySingleton<_i10.ProductsStore>(
       () => _i10.ProductsStore(get<_i7.IProductRepository>()));
+  gh.lazySingleton<_i11.SplashController>(
+      () => _i11.SplashController(get<_i10.ProductsStore>()),
+      dispose: (i) => i.dispose());
   return get;
 }
