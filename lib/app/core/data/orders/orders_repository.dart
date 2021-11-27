@@ -50,9 +50,8 @@ class OrdersRepository implements IOrdersRepository {
   @override
   Future<int> createOrder(OrderDTO orderDTO) async {
     final Database connection = await _connection.openConnection();
-    late int orderId;
-    await connection.transaction((txn) async {
-      orderId = await txn
+    final int orderId = await connection.transaction((txn) async {
+      int id = await txn
           .rawInsert('INSERT INTO orders(table_number, status) VALUES (?, ?)', [
         orderDTO.tableNumber,
         orderDTO.status ? 1 : 0,
@@ -61,11 +60,12 @@ class OrdersRepository implements IOrdersRepository {
         await txn.rawInsert('''
           INSERT INTO orders_has_products(orders_id, products_id, quantity) VALUES (?, ?, ?)
         ''', [
-          orderId,
+          id,
           productDTO.id,
           productDTO.quantity,
         ]);
       }
+      return id;
     });
     return orderId;
   }
@@ -81,9 +81,9 @@ class OrdersRepository implements IOrdersRepository {
   @override
   Future<int> updateOrder(OrderDTO updatedOrder) async {
     final Database connection = await _connection.openConnection();
-    late int updatedOrdersCount;
-    await connection.transaction((txn) async {
-      updatedOrdersCount = await txn.rawUpdate('''
+
+    final int updatedOrdersCount = await connection.transaction((txn) async {
+      int count = await txn.rawUpdate('''
         UPDATE orders
         SET table_number = ?, status = ?
         WHERE id = ?
@@ -103,6 +103,7 @@ class OrdersRepository implements IOrdersRepository {
           productDTO.quantity,
         ]);
       }
+      return count;
     });
     return updatedOrdersCount;
   }
@@ -114,7 +115,7 @@ class OrdersRepository implements IOrdersRepository {
       SELECT o.id as id,
       o.table_number as table_number,
       o.status as status
-      FROM orders as o 
+      FROM orders as o
       WHERE o.status = ?
       ''', [1]);
 
