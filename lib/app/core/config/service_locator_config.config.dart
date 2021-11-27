@@ -13,8 +13,9 @@ import '../data/orders/orders_repository.dart' as _i6;
 import '../data/products/i_product_repository.dart' as _i7;
 import '../data/products/product_repository.dart' as _i8;
 import '../database/db_connection.dart' as _i3;
-import '../stores/orders_store.dart'
-    as _i9; // ignore_for_file: unnecessary_lambdas
+import '../stores/orders_store.dart' as _i9;
+import '../stores/products_store.dart'
+    as _i10; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -29,5 +30,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       () => _i8.ProductRepository(get<_i3.DbConnection>()));
   gh.lazySingleton<_i9.OrdersStore>(
       () => _i9.OrdersStore(get<_i5.IOrdersRepository>()));
+  gh.lazySingleton<_i10.ProductsStore>(
+      () => _i10.ProductsStore(get<_i7.IProductRepository>()));
   return get;
 }
