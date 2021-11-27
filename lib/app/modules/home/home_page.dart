@@ -8,6 +8,8 @@ import 'package:quiosque/app/modules/home/widgets/table_widget.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
+  static String route = '/';
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -26,7 +28,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    ordersStore.loadAllActiveOrders();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      ordersStore.loadAllActiveOrders();
+    });
   }
 
   @override
