@@ -20,7 +20,7 @@ class ProductRepository implements IProductRepository {
       final results =
           await connection.rawQuery('SELECT id, product, price FROM products');
       return results
-          .map((productMap) => ProductModel.fromMap(productMap))
+          .map((productMap) => ProductModel.fromJson(productMap))
           .toList();
     } on DatabaseException catch (e) {
       throw SqfliteExceptionHandler.handleException(e);
