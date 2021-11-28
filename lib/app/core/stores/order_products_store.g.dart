@@ -79,6 +79,15 @@ mixin _$OrderProductsStore on _OrderProductsStoreBase, Store {
         .run(() => super.fetchOrderProducts(orderId));
   }
 
+  final _$updateOrderProductsAsyncAction =
+      AsyncAction('_OrderProductsStoreBase.updateOrderProducts');
+
+  @override
+  Future<void> updateOrderProducts(OrderProductDTO orderProductDTO) {
+    return _$updateOrderProductsAsyncAction
+        .run(() => super.updateOrderProducts(orderProductDTO));
+  }
+
   @override
   String toString() {
     return '''

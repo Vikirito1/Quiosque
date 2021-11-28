@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+import 'package:quiosque/app/core/data/dtos/order_product_dto.dart';
 import 'package:quiosque/app/core/data/products/i_product_repository.dart';
 import 'package:quiosque/app/core/exceptions/sqflite_exceptions.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
@@ -34,6 +35,18 @@ abstract class _OrderProductsStoreBase with Store {
       final List<ProductModel> results =
           await _productRepository.getProductsByOrderId(orderId);
       orderProducts = ObservableList.of(results);
+      isLoading = false;
+    } on SqfliteException catch (e) {
+      error = e.message;
+    }
+  }
+
+  @action
+  Future<void> updateOrderProducts(OrderProductDTO orderProductDTO) async {
+    try {
+      isLoading = true;
+      error = null;
+      await _productRepository.updateProductQuantity(orderProductDTO);
       isLoading = false;
     } on SqfliteException catch (e) {
       error = e.message;
