@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:quiosque/app/core/data/dtos/order_product_dto.dart';
 import 'package:quiosque/app/core/data/dtos/product_dto.dart';
 import 'package:quiosque/app/core/database/db_connection.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
@@ -102,6 +103,27 @@ class ProductRepository implements IProductRepository {
       return productsFromOrder
           .map((productMap) => ProductModel.fromJson(productMap))
           .toList();
+    } on DatabaseException catch (e) {
+      throw SqfliteExceptionHandler.handleException(e);
+    } finally {
+      await connection.close();
+    }
+  }
+
+  @override
+  Future<int> updateProductQuantity(OrderProductDTO orderProductDTO) async {
+    final Database connection = await _connection.openConnection();
+    try {
+      final int affectedLines = await connection.rawUpdate('''
+        UPDATE orders_has_products
+        SET quantity = ?
+        WHERE orders_id = ? AND products_id = ?
+      ''', [
+        orderProductDTO.quantity,
+        orderProductDTO.ordersId,
+        orderProductDTO.productsId
+      ]);
+      return affectedLines;
     } on DatabaseException catch (e) {
       throw SqfliteExceptionHandler.handleException(e);
     } finally {

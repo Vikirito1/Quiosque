@@ -66,7 +66,7 @@ class OrdersRepository implements IOrdersRepository {
           INSERT INTO orders_has_products(orders_id, products_id, quantity) VALUES (?, ?, ?)
         ''', [
           updatedOrder.id,
-          productDTO.productId,
+          productDTO.productsId,
           productDTO.quantity,
         ]);
       }

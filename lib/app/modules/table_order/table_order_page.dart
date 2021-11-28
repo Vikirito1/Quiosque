@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:quiosque/app/core/data/dtos/order_product_dto.dart';
 import 'package:quiosque/app/core/data/dtos/table_order_page_dto.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/core/stores/order_products_store.dart';
@@ -48,7 +49,18 @@ class _TableOrderPageState extends State<TableOrderPage> {
             } else {
               final List<ProductModel> orderProducts =
                   _orderProductsStore.orderProducts!;
-              return OrderWidget(orderProducts: orderProducts);
+              return OrderWidget(
+                orderProducts: orderProducts,
+                onQuantityChanged: (productId, quantity) async {
+                  final OrderProductDTO updatedProduct = OrderProductDTO(
+                    ordersId: data.orderId!,
+                    productsId: productId,
+                    quantity: quantity,
+                  );
+                  await _orderProductsStore.updateOrderProducts(updatedProduct);
+                  await _orderProductsStore.fetchOrderProducts(data.orderId!);
+                },
+              );
             }
           },
         ),
