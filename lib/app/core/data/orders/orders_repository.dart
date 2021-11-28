@@ -3,7 +3,6 @@ import 'package:quiosque/app/core/data/dtos/order_dto.dart';
 import 'package:quiosque/app/core/data/orders/i_orders_repository.dart';
 import 'package:quiosque/app/core/database/db_connection.dart';
 import 'package:quiosque/app/core/models/order_model.dart';
-import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 @LazySingleton(as: IOrdersRepository)
@@ -24,41 +23,17 @@ class OrdersRepository implements IOrdersRepository {
 
     List<OrderModel> allOrders =
         orderResults.map((orderMap) => OrderModel.fromJson(orderMap)).toList();
-    for (var order in allOrders) {
-      final productsResult = await connection.rawQuery(''' 
-        SELECT id, product, price, ohp.quantity AS quantity
-        FROM products
-        JOIN orders_has_products as ohp ON ohp.products_id = id
-        WHERE ohp.orders_id = ?;
-      ''', [order.id]);
-      final orderProducts = productsResult
-          .map((productMap) => ProductModel.fromJson(productMap))
-          .toList();
-      order.productsOrdered.addAll(orderProducts);
-    }
     return allOrders;
   }
 
   @override
   Future<int> createOrder(OrderDTO orderDTO) async {
     final Database connection = await _connection.openConnection();
-    final int orderId = await connection.transaction((txn) async {
-      int id = await txn
-          .rawInsert('INSERT INTO orders(table_number, status) VALUES (?, ?)', [
-        orderDTO.tableNumber,
-        orderDTO.status ? 1 : 0,
-      ]);
-      for (var productDTO in orderDTO.products) {
-        await txn.rawInsert('''
-          INSERT INTO orders_has_products(orders_id, products_id, quantity) VALUES (?, ?, ?)
-        ''', [
-          id,
-          productDTO.id,
-          productDTO.quantity,
-        ]);
-      }
-      return id;
-    });
+    final int orderId = await connection
+        .rawInsert('INSERT INTO orders(table_number, status) VALUES (?, ?)', [
+      orderDTO.tableNumber,
+      orderDTO.status ? 1 : 0,
+    ]);
     return orderId;
   }
 
@@ -91,7 +66,7 @@ class OrdersRepository implements IOrdersRepository {
           INSERT INTO orders_has_products(orders_id, products_id, quantity) VALUES (?, ?, ?)
         ''', [
           updatedOrder.id,
-          productDTO.id,
+          productDTO.productId,
           productDTO.quantity,
         ]);
       }
@@ -111,23 +86,8 @@ class OrdersRepository implements IOrdersRepository {
       WHERE o.status = ?
       ''', [1]);
 
-    List<OrderModel> allActiveOrders = orderResults
-        .map(
-          (orderMap) => OrderModel.fromJson(orderMap),
-        )
-        .toList();
-    for (var order in allActiveOrders) {
-      final productsResult = await connection.rawQuery(''' 
-        SELECT id, product, price, ohp.quantity AS quantity
-        FROM products
-        JOIN orders_has_products as ohp ON ohp.products_id = id
-        WHERE ohp.orders_id = ?;
-      ''', [order.id]);
-      final orderProducts = productsResult
-          .map((productMap) => ProductModel.fromJson(productMap))
-          .toList();
-      order.productsOrdered.addAll(orderProducts);
-    }
+    List<OrderModel> allActiveOrders =
+        orderResults.map((orderMap) => OrderModel.fromJson(orderMap)).toList();
     return allActiveOrders;
   }
 }

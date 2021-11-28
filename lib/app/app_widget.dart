@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiosque/app/modules/home/home_page.dart';
 import 'package:quiosque/app/modules/splash/splash_screen.dart';
+import 'package:quiosque/app/modules/table_order/table_order_page.dart';
 
 class AppWidget extends StatelessWidget {
   const AppWidget({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class AppWidget extends StatelessWidget {
       routes: {
         SplashScreen.route: (context) => const SplashScreen(),
         HomePage.route: (context) => const HomePage(),
+        TableOrderPage.route: (context) => const TableOrderPage(),
       },
     );
   }

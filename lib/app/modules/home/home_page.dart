@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:quiosque/app/core/data/dtos/table_order_page_dto.dart';
 import 'package:quiosque/app/core/stores/orders_store.dart';
 import 'package:quiosque/app/modules/home/home_controller.dart';
 import 'package:quiosque/app/modules/home/widgets/table_widget.dart';
+import 'package:quiosque/app/modules/table_order/table_order_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -65,14 +67,12 @@ class _HomePageState extends State<HomePage> {
                   orderModel: homeController.findActiveOrderByTableNumber(
                       ordersStore.allOrders!, index + 1),
                   tableNumber: index + 1,
-                  onTableSelected: () {
-                    final snack = SnackBar(
-                      content: Text('Clicou Mesa ${index + 1}'),
-                      duration: Duration(seconds: s),
-                    );
-                    // ignore: unused_local_variable
-                    var showSnackBar =
-                        scaffoldMessengerKey.currentState?.showSnackBar(snack);
+                  onTableSelected: (orderId) async {
+                    final TableOrderPageDTO data = TableOrderPageDTO(
+                        tableNumber: index + 1, orderId: orderId);
+                    await Navigator.pushNamed(context, TableOrderPage.route,
+                        arguments: data);
+                    await ordersStore.loadAllActiveOrders();
                   },
                 ),
               );

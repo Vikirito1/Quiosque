@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:quiosque/app/core/models/order_model.dart';
+import 'package:quiosque/app/core/models/product_model.dart';
 
 class OrderWidget extends StatelessWidget {
-  const OrderWidget({Key? key, required this.activeOrder}) : super(key: key);
+  const OrderWidget({Key? key, required this.orderProducts}) : super(key: key);
 
-  final OrderModel activeOrder;
+  final List<ProductModel> orderProducts;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(''),
-      ),
-      body: Container(),
+    return ListView.builder(
+      itemCount: orderProducts.length,
+      itemBuilder: (_, index) {
+        final ProductModel orderProduct = orderProducts[index];
+        return ListTile(
+          title: Text(orderProduct.product),
+          subtitle: Text('R\$ ${orderProduct.price}'),
+          leading: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(orderProduct.quantity.toString()),
+            ],
+          ),
+        );
+      },
     );
   }
 }

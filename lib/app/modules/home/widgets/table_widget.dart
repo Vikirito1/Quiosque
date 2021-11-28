@@ -10,13 +10,15 @@ class TableWidget extends StatelessWidget {
   }) : super(key: key);
 
   final int tableNumber;
-  final Function()? onTableSelected;
+  final Function(int? orderId)? onTableSelected;
   final OrderModel? orderModel;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTableSelected,
+      onTap: () {
+        onTableSelected?.call(orderModel?.id);
+      },
       child: Container(
         decoration: BoxDecoration(
           image: const DecorationImage(

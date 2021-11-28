@@ -1,9 +1,11 @@
 class OrderProductDTO {
   OrderProductDTO({
-    required this.id,
+    required this.orderId,
+    required this.productId,
     required this.quantity,
   });
 
-  final int id;
+  final int orderId;
+  final int productId;
   final int quantity;
 }
