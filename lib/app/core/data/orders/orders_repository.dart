@@ -22,16 +22,8 @@ class OrdersRepository implements IOrdersRepository {
       FROM orders as o 
       ''');
 
-    List<OrderModel> allOrders = orderResults
-        .map(
-          (orderMap) => OrderModel(
-            id: orderMap['id'] as int,
-            tableNumber: orderMap['table_number'] as int,
-            status: (orderMap['status'] as int) == 1,
-            productsOrdered: [],
-          ),
-        )
-        .toList();
+    List<OrderModel> allOrders =
+        orderResults.map((orderMap) => OrderModel.fromJson(orderMap)).toList();
     for (var order in allOrders) {
       final productsResult = await connection.rawQuery(''' 
         SELECT id, product, price, ohp.quantity AS quantity
@@ -40,7 +32,7 @@ class OrdersRepository implements IOrdersRepository {
         WHERE ohp.orders_id = ?;
       ''', [order.id]);
       final orderProducts = productsResult
-          .map((productMap) => ProductModel.fromMap(productMap))
+          .map((productMap) => ProductModel.fromJson(productMap))
           .toList();
       order.productsOrdered.addAll(orderProducts);
     }
@@ -121,12 +113,7 @@ class OrdersRepository implements IOrdersRepository {
 
     List<OrderModel> allActiveOrders = orderResults
         .map(
-          (orderMap) => OrderModel(
-            id: orderMap['id'] as int,
-            tableNumber: orderMap['table_number'] as int,
-            status: (orderMap['status'] as int) == 1,
-            productsOrdered: [],
-          ),
+          (orderMap) => OrderModel.fromJson(orderMap),
         )
         .toList();
     for (var order in allActiveOrders) {
@@ -137,7 +124,7 @@ class OrdersRepository implements IOrdersRepository {
         WHERE ohp.orders_id = ?;
       ''', [order.id]);
       final orderProducts = productsResult
-          .map((productMap) => ProductModel.fromMap(productMap))
+          .map((productMap) => ProductModel.fromJson(productMap))
           .toList();
       order.productsOrdered.addAll(orderProducts);
     }
