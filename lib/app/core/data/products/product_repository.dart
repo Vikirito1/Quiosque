@@ -130,4 +130,37 @@ class ProductRepository implements IProductRepository {
       await connection.close();
     }
   }
+
+  @override
+  Future<int> addProductToOrder(OrderProductDTO product) async {
+    final Database connection = await _connection.openConnection();
+    try {
+      final int result = await connection.insert(
+        'orders_has_products',
+        product.toJson(),
+      );
+      return result;
+    } on DatabaseException catch (e) {
+      throw SqfliteExceptionHandler.handleException(e);
+    } finally {
+      await connection.close();
+    }
+  }
+
+  @override
+  Future<int> removeProductFromOrder(int orderId, int productId) async {
+    final Database connection = await _connection.openConnection();
+    try {
+      final int affectedRows = await connection.delete(
+        'orders_has_products',
+        where: 'orders_id = ? AND products_id = ?',
+        whereArgs: [orderId, productId],
+      );
+      return affectedRows;
+    } on DatabaseException catch (e) {
+      throw SqfliteExceptionHandler.handleException(e);
+    } finally {
+      await connection.close();
+    }
+  }
 }

@@ -16,7 +16,7 @@ abstract class _OrderProductsStoreBase with Store {
   final IProductRepository _productRepository;
 
   @observable
-  ObservableList<ProductModel>? orderProducts;
+  ObservableList<ProductModel> orderProducts = ObservableList<ProductModel>();
 
   @observable
   int? orderId;
@@ -50,6 +50,40 @@ abstract class _OrderProductsStoreBase with Store {
       isLoading = false;
     } on SqfliteException catch (e) {
       error = e.message;
+    }
+  }
+
+  @action
+  void _addProductToSelection(ProductModel product) {
+    orderProducts.add(product);
+  }
+
+  @action
+  void _removeProductFromSelection(ProductModel product) {
+    orderProducts.remove(product);
+  }
+
+  @action
+  Future<void> toggleAddRemoveProduct(
+      ProductModel productModel, int orderId) async {
+    try {
+      isLoading = true;
+      if (!orderProducts.contains(productModel)) {
+        await _productRepository.addProductToOrder(
+          OrderProductDTO(
+              ordersId: orderId, productsId: productModel.id, quantity: 0),
+        );
+
+        _addProductToSelection(productModel);
+      } else {
+        await _productRepository.removeProductFromOrder(
+            orderId, productModel.id);
+        _removeProductFromSelection(productModel);
+      }
+    } on SqfliteException catch (e) {
+      error = e.message;
+    } finally {
+      isLoading = false;
     }
   }
 }
