@@ -5,7 +5,9 @@ import 'package:quiosque/app/core/data/dtos/order_product_dto.dart';
 import 'package:quiosque/app/core/data/dtos/table_order_page_dto.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/core/stores/order_products_store.dart';
-import 'package:quiosque/app/modules/table_order/widget/order_widget.dart';
+import 'package:quiosque/app/core/stores/products_store.dart';
+import 'package:quiosque/app/modules/table_order/widgets/add_order_product_widget.dart';
+import 'package:quiosque/app/modules/table_order/widgets/order_widget.dart';
 
 class TableOrderPage extends StatefulWidget {
   const TableOrderPage({Key? key}) : super(key: key);
@@ -19,11 +21,13 @@ class TableOrderPage extends StatefulWidget {
 class _TableOrderPageState extends State<TableOrderPage> {
   late final TableOrderPageDTO data;
   late final OrderProductsStore _orderProductsStore;
+  late final ProductsStore _productsStore;
 
   @override
   void didChangeDependencies() {
     data = ModalRoute.of(context)?.settings.arguments as TableOrderPageDTO;
     _orderProductsStore = GetIt.I<OrderProductsStore>();
+    _productsStore = GetIt.I<ProductsStore>();
     _orderProductsStore.orderId = data.orderId;
     if (data.orderId != null) {
       _orderProductsStore.fetchOrderProducts(data.orderId!);
@@ -36,9 +40,22 @@ class _TableOrderPageState extends State<TableOrderPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Mesa ${data.tableNumber}'),
-        actions: <Widget>[
-          IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
-        ],
+        actions: data.orderId != null
+            ? <Widget>[
+                Observer(
+                  builder: (_) => AddOrderProductWidget(
+                    availableProducts: _productsStore.allProducts!,
+                    selectedProducts: _orderProductsStore.orderProducts,
+                    onProductTap: (product) async {
+                      await _orderProductsStore.toggleAddRemoveProduct(
+                        product,
+                        data.orderId!,
+                      );
+                    },
+                  ),
+                ),
+              ]
+            : null,
       ),
       body: Center(
         child: Observer(
@@ -51,7 +68,7 @@ class _TableOrderPageState extends State<TableOrderPage> {
               return const Text('Mesa fechada');
             } else {
               final List<ProductModel> orderProducts =
-                  _orderProductsStore.orderProducts!;
+                  _orderProductsStore.orderProducts;
               return OrderWidget(
                 orderProducts: orderProducts,
                 onQuantityChanged: (productId, quantity) async {

@@ -10,4 +10,6 @@ abstract class IProductRepository {
   Future<int> deleteProduct(int productId);
   Future<List<ProductModel>> getProductsByOrderId(int orderId);
   Future<int> updateProductQuantity(OrderProductDTO orderProductDTO);
+  Future<int> addProductToOrder(OrderProductDTO product);
+  Future<int> removeProductFromOrder(int orderId, int productId);
 }

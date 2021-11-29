@@ -13,13 +13,13 @@ mixin _$OrderProductsStore on _OrderProductsStoreBase, Store {
       Atom(name: '_OrderProductsStoreBase.orderProducts');
 
   @override
-  ObservableList<ProductModel>? get orderProducts {
+  ObservableList<ProductModel> get orderProducts {
     _$orderProductsAtom.reportRead();
     return super.orderProducts;
   }
 
   @override
-  set orderProducts(ObservableList<ProductModel>? value) {
+  set orderProducts(ObservableList<ProductModel> value) {
     _$orderProductsAtom.reportWrite(value, super.orderProducts, () {
       super.orderProducts = value;
     });
@@ -86,6 +86,40 @@ mixin _$OrderProductsStore on _OrderProductsStoreBase, Store {
   Future<void> updateOrderProducts(OrderProductDTO orderProductDTO) {
     return _$updateOrderProductsAsyncAction
         .run(() => super.updateOrderProducts(orderProductDTO));
+  }
+
+  final _$toggleAddRemoveProductAsyncAction =
+      AsyncAction('_OrderProductsStoreBase.toggleAddRemoveProduct');
+
+  @override
+  Future<void> toggleAddRemoveProduct(ProductModel productModel, int orderId) {
+    return _$toggleAddRemoveProductAsyncAction
+        .run(() => super.toggleAddRemoveProduct(productModel, orderId));
+  }
+
+  final _$_OrderProductsStoreBaseActionController =
+      ActionController(name: '_OrderProductsStoreBase');
+
+  @override
+  void _addProductToSelection(ProductModel product) {
+    final _$actionInfo = _$_OrderProductsStoreBaseActionController.startAction(
+        name: '_OrderProductsStoreBase._addProductToSelection');
+    try {
+      return super._addProductToSelection(product);
+    } finally {
+      _$_OrderProductsStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _removeProductFromSelection(ProductModel product) {
+    final _$actionInfo = _$_OrderProductsStoreBaseActionController.startAction(
+        name: '_OrderProductsStoreBase._removeProductFromSelection');
+    try {
+      return super._removeProductFromSelection(product);
+    } finally {
+      _$_OrderProductsStoreBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override
