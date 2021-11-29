@@ -36,6 +36,9 @@ class _TableOrderPageState extends State<TableOrderPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Mesa ${data.tableNumber}'),
+        actions: <Widget>[
+          IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+        ],
       ),
       body: Center(
         child: Observer(
