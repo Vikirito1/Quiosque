@@ -20,7 +20,10 @@ class _SplashScreenState extends State<SplashScreen> {
     _controller.initializeDependencies().then((_) {
       Future.delayed(const Duration(seconds: 1), () {
         Navigator.pushNamedAndRemoveUntil(
-            context, HomePage.route, (route) => false);
+          context,
+          HomePage.route,
+          (route) => false,
+        );
       });
     });
     super.initState();
@@ -28,9 +31,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      backgroundColor: const Color(0xFFF6FD03),
       body: Center(
-        child: CircularProgressIndicator(),
+        child: Image.asset('images/logo.png'),
       ),
     );
   }

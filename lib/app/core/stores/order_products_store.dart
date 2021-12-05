@@ -7,7 +7,7 @@ import 'package:quiosque/app/core/models/product_model.dart';
 
 part 'order_products_store.g.dart';
 
-@LazySingleton()
+@Injectable()
 class OrderProductsStore = _OrderProductsStoreBase with _$OrderProductsStore;
 
 abstract class _OrderProductsStoreBase with Store {
@@ -86,4 +86,8 @@ abstract class _OrderProductsStoreBase with Store {
       isLoading = false;
     }
   }
+
+  double get tableOrderTotal => orderProducts
+      .map((product) => product.price * product.quantity!)
+      .fold(0.0, (previousValue, element) => previousValue + element);
 }
