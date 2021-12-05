@@ -39,7 +39,14 @@ class _TableOrderPageState extends State<TableOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mesa ${data.tableNumber}'),
+        title: Observer(
+          builder: (_) {
+            return _orderProductsStore.orderId != null
+                ? Text(
+                    'Mesa ${data.tableNumber} - R\$ ${_orderProductsStore.tableOrderTotal.toStringAsFixed(2)}')
+                : Text('Mesa ${data.tableNumber}');
+          },
+        ),
         actions: data.orderId != null
             ? <Widget>[
                 Observer(
