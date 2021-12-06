@@ -17,7 +17,7 @@ class OrdersRepository implements IOrdersRepository {
     final orderResults = await connection.rawQuery(''' 
       SELECT o.id as id,
       o.table_number as table_number,
-      o.status as status
+      o.is_opened as is_opened
       FROM orders as o 
       ''');
 
@@ -29,10 +29,10 @@ class OrdersRepository implements IOrdersRepository {
   @override
   Future<int> createOrder(OrderDTO orderDTO) async {
     final Database connection = await _connection.openConnection();
-    final int orderId = await connection
-        .rawInsert('INSERT INTO orders(table_number, status) VALUES (?, ?)', [
+    final int orderId = await connection.rawInsert(
+        'INSERT INTO orders(table_number, is_opened) VALUES (?, ?)', [
       orderDTO.tableNumber,
-      orderDTO.status ? 1 : 0,
+      orderDTO.isOpened ? 1 : 0,
     ]);
     return orderId;
   }
@@ -52,11 +52,11 @@ class OrdersRepository implements IOrdersRepository {
     final int updatedOrdersCount = await connection.transaction((txn) async {
       int count = await txn.rawUpdate('''
         UPDATE orders
-        SET table_number = ?, status = ?
+        SET table_number = ?, is_opened = ?
         WHERE id = ?
       ''', [
         updatedOrder.tableNumber,
-        updatedOrder.status ? 1 : 0,
+        updatedOrder.isOpened ? 1 : 0,
         updatedOrder.id,
       ]);
       await txn.rawDelete('DELETE FROM orders_has_products WHERE orders_id = ?',
@@ -81,9 +81,9 @@ class OrdersRepository implements IOrdersRepository {
     final orderResults = await connection.rawQuery(''' 
       SELECT o.id as id,
       o.table_number as table_number,
-      o.status as status
+      o.is_opened as is_opened
       FROM orders as o
-      WHERE o.status = ?
+      WHERE o.is_opened = ?
       ''', [1]);
 
     List<OrderModel> allActiveOrders =

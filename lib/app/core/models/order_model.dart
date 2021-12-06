@@ -9,13 +9,13 @@ class OrderModel {
   OrderModel({
     required this.id,
     required this.tableNumber,
-    required this.status,
+    required this.isOpened,
     this.productsOrdered = const [],
   });
 
   final int id;
   final int tableNumber;
-  final bool status;
+  final bool isOpened;
   List<ProductModel> productsOrdered;
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>

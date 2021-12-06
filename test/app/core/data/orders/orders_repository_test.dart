@@ -91,7 +91,7 @@ void main() {
     when(() => databaseMock.transaction(any())).thenAnswer((_) async => 1);
     when(() => databaseMock.rawUpdate(any(), [
           updatedOrder.tableNumber,
-          updatedOrder.status ? 1 : 0,
+          updatedOrder.isOpened ? 1 : 0,
           updatedOrder.id,
         ])).thenAnswer((_) async => 1);
     when(() => databaseMock.rawDelete(any(), [updatedOrder.id]))
