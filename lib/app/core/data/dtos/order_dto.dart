@@ -4,12 +4,12 @@ class OrderDTO {
   OrderDTO({
     this.id,
     required this.tableNumber,
-    this.status = false,
+    this.isOpened = false,
     required this.products,
   });
 
   final int? id;
   final int tableNumber;
-  final bool status;
+  final bool isOpened;
   final List<OrderProductDTO> products;
 }

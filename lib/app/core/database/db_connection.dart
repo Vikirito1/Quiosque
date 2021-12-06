@@ -15,7 +15,7 @@ class DbConnection {
     CREATE TABLE IF NOT EXISTS orders (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       table_number INTEGER NOT NULL,
-      status INTEGER DEFAULT 0
+      is_opened INTEGER DEFAULT 0
     );
   ''';
 
