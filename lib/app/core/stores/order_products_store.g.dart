@@ -9,6 +9,14 @@ part of 'order_products_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$OrderProductsStore on _OrderProductsStoreBase, Store {
+  Computed<double>? _$tableOrderTotalComputed;
+
+  @override
+  double get tableOrderTotal => (_$tableOrderTotalComputed ??= Computed<double>(
+          () => super.tableOrderTotal,
+          name: '_OrderProductsStoreBase.tableOrderTotal'))
+      .value;
+
   final _$orderProductsAtom =
       Atom(name: '_OrderProductsStoreBase.orderProducts');
 
@@ -97,6 +105,15 @@ mixin _$OrderProductsStore on _OrderProductsStoreBase, Store {
         .run(() => super.toggleAddRemoveProduct(productModel, orderId));
   }
 
+  final _$createOrderAsyncAction =
+      AsyncAction('_OrderProductsStoreBase.createOrder');
+
+  @override
+  Future<void> createOrder({required int tableNumber}) {
+    return _$createOrderAsyncAction
+        .run(() => super.createOrder(tableNumber: tableNumber));
+  }
+
   final _$_OrderProductsStoreBaseActionController =
       ActionController(name: '_OrderProductsStoreBase');
 
@@ -128,7 +145,8 @@ mixin _$OrderProductsStore on _OrderProductsStoreBase, Store {
 orderProducts: ${orderProducts},
 orderId: ${orderId},
 isLoading: ${isLoading},
-error: ${error}
+error: ${error},
+tableOrderTotal: ${tableOrderTotal}
     ''';
   }
 }

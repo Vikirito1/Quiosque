@@ -7,6 +7,7 @@ import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/core/stores/order_products_store.dart';
 import 'package:quiosque/app/core/stores/products_store.dart';
 import 'package:quiosque/app/modules/table_order/widgets/add_order_product_widget.dart';
+import 'package:quiosque/app/modules/table_order/widgets/no_order_widget.dart';
 import 'package:quiosque/app/modules/table_order/widgets/order_widget.dart';
 
 class TableOrderPage extends StatefulWidget {
@@ -38,32 +39,22 @@ class _TableOrderPageState extends State<TableOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Observer(
-          builder: (_) {
-            return _orderProductsStore.orderId != null
-                ? Text(
-                    'Mesa ${data.tableNumber} - R\$ ${_orderProductsStore.tableOrderTotal.toStringAsFixed(2)}')
-                : Text('Mesa ${data.tableNumber}');
-          },
+      appBar: AppBar(title: Text('Mesa ${data.tableNumber}'), actions: <Widget>[
+        Observer(
+          builder: (_) => _orderProductsStore.orderId != null
+              ? AddOrderProductWidget(
+                  availableProducts: _productsStore.allProducts!,
+                  selectedProducts: _orderProductsStore.orderProducts,
+                  onProductTap: (product) async {
+                    await _orderProductsStore.toggleAddRemoveProduct(
+                      product,
+                      _orderProductsStore.orderId!,
+                    );
+                  },
+                )
+              : const SizedBox.shrink(),
         ),
-        actions: data.orderId != null
-            ? <Widget>[
-                Observer(
-                  builder: (_) => AddOrderProductWidget(
-                    availableProducts: _productsStore.allProducts!,
-                    selectedProducts: _orderProductsStore.orderProducts,
-                    onProductTap: (product) async {
-                      await _orderProductsStore.toggleAddRemoveProduct(
-                        product,
-                        data.orderId!,
-                      );
-                    },
-                  ),
-                ),
-              ]
-            : null,
-      ),
+      ]),
       body: Center(
         child: Observer(
           builder: (_) {
@@ -72,7 +63,13 @@ class _TableOrderPageState extends State<TableOrderPage> {
             } else if (_orderProductsStore.error != null) {
               return Text(_orderProductsStore.error!);
             } else if (_orderProductsStore.orderId == null) {
-              return const Text('Mesa fechada');
+              return NoOrderWidget(
+                tableNumber: data.tableNumber,
+                onOrderCreated: () {
+                  _orderProductsStore.createOrder(
+                      tableNumber: data.tableNumber);
+                },
+              );
             } else {
               final List<ProductModel> orderProducts =
                   _orderProductsStore.orderProducts;

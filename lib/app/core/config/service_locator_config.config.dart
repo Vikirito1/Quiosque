@@ -30,8 +30,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       () => _i6.OrdersRepository(get<_i3.DbConnection>()));
   gh.lazySingleton<_i7.IProductRepository>(
       () => _i8.ProductRepository(get<_i3.DbConnection>()));
-  gh.factory<_i9.OrderProductsStore>(
-      () => _i9.OrderProductsStore(get<_i7.IProductRepository>()));
+  gh.factory<_i9.OrderProductsStore>(() => _i9.OrderProductsStore(
+      get<_i7.IProductRepository>(), get<_i5.IOrdersRepository>()));
   gh.lazySingleton<_i10.OrdersStore>(
       () => _i10.OrdersStore(get<_i5.IOrdersRepository>()));
   gh.lazySingleton<_i11.ProductsStore>(
