@@ -1,6 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+import 'package:quiosque/app/core/data/dtos/order_dto.dart';
 import 'package:quiosque/app/core/data/dtos/order_product_dto.dart';
+import 'package:quiosque/app/core/data/orders/i_orders_repository.dart';
 import 'package:quiosque/app/core/data/products/i_product_repository.dart';
 import 'package:quiosque/app/core/exceptions/sqflite_exceptions.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
@@ -11,9 +13,10 @@ part 'order_products_store.g.dart';
 class OrderProductsStore = _OrderProductsStoreBase with _$OrderProductsStore;
 
 abstract class _OrderProductsStoreBase with Store {
-  _OrderProductsStoreBase(this._productRepository);
+  _OrderProductsStoreBase(this._productRepository, this._ordersRepository);
 
   final IProductRepository _productRepository;
+  final IOrdersRepository _ordersRepository;
 
   @observable
   ObservableList<ProductModel> orderProducts = ObservableList<ProductModel>();
@@ -87,6 +90,14 @@ abstract class _OrderProductsStoreBase with Store {
     }
   }
 
+  @action
+  Future<void> createOrder({required int tableNumber}) async {
+    final OrderDTO creatingOrder =
+        OrderDTO(tableNumber: tableNumber, products: [], isOpened: true);
+    orderId = await _ordersRepository.createOrder(creatingOrder);
+  }
+
+  @computed
   double get tableOrderTotal => orderProducts
       .map((product) => product.price * product.quantity!)
       .fold(0.0, (previousValue, element) => previousValue + element);
