@@ -11,19 +11,16 @@ class NoOrderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const Text('Mesa Fechada'),
-        TextButton(
-          onPressed: onOrderCreated,
-          child: Text('Abrir Mesa $tableNumber'),
-          style: TextButton.styleFrom(
-            primary: Colors.white,
-            backgroundColor: Colors.blueAccent,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Text('Mesa Fechada'),
+          ElevatedButton(
+            onPressed: onOrderCreated,
+            child: Text('Abrir Mesa $tableNumber'),
           ),
-        )
-      ],
-    ));
+        ],
+      ),
+    );
   }
 }
