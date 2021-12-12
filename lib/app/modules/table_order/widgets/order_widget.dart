@@ -37,10 +37,10 @@ class OrderWidget extends StatelessWidget {
                             (orderProduct.quantity! - 1),
                           );
                         },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.remove_circle,
-                    color: Theme.of(context).primaryColor,
                   ),
+                  color: Theme.of(context).primaryColor,
                 ),
                 Text(orderProduct.quantity.toString()),
                 IconButton(
@@ -50,10 +50,10 @@ class OrderWidget extends StatelessWidget {
                       (orderProduct.quantity! + 1),
                     );
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.add_circle,
-                    color: Theme.of(context).primaryColor,
                   ),
+                  color: Theme.of(context).primaryColor,
                 ),
               ],
             ),

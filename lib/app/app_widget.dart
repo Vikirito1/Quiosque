@@ -8,9 +8,14 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const Color _primaryColor = Color(0xFFF70106);
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Colors.blue,
+        primaryColor: _primaryColor,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: _primaryColor,
+        ),
+        disabledColor: _primaryColor.withAlpha(120),
       ),
       initialRoute: SplashScreen.route,
       routes: {
