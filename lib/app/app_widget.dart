@@ -16,6 +16,20 @@ class AppWidget extends StatelessWidget {
           backgroundColor: _primaryColor,
         ),
         disabledColor: _primaryColor.withAlpha(120),
+        checkboxTheme: CheckboxThemeData(
+          side: const BorderSide(color: Colors.black),
+          fillColor: MaterialStateColor.resolveWith((states) {
+            if (states.contains(MaterialState.disabled)) {
+              return _primaryColor.withAlpha(120);
+            }
+            return _primaryColor;
+          }),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            primary: _primaryColor,
+          ),
+        ),
       ),
       initialRoute: SplashScreen.route,
       routes: {
