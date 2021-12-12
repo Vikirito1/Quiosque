@@ -19,12 +19,13 @@ class OrderWidget extends StatelessWidget {
         final ProductModel orderProduct = orderProducts[index];
         return ListTile(
           contentPadding: const EdgeInsets.only(right: 16.0),
+          horizontalTitleGap: 0.0,
           title: Text(orderProduct.product),
           subtitle: Text('R\$ ${orderProduct.price.toStringAsFixed(2)}'),
           trailing: Text(
               'R\$ ${(orderProduct.price * orderProduct.quantity!).toStringAsFixed(2)}'),
           leading: SizedBox(
-            width: 110,
+            width: 113,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -42,7 +43,11 @@ class OrderWidget extends StatelessWidget {
                   ),
                   color: Theme.of(context).primaryColor,
                 ),
-                Text(orderProduct.quantity.toString()),
+                Expanded(
+                    child: Text(
+                  orderProduct.quantity.toString(),
+                  textAlign: TextAlign.center,
+                )),
                 IconButton(
                   onPressed: () {
                     onQuantityChanged?.call(
