@@ -78,7 +78,8 @@ class _TableOrderPageState extends State<TableOrderPage> {
                 tableNumber: data.tableNumber,
                 onOrderCreated: () {
                   _orderProductsStore.createOrder(
-                      tableNumber: data.tableNumber);
+                    tableNumber: data.tableNumber,
+                  );
                 },
               );
             } else {
@@ -93,7 +94,8 @@ class _TableOrderPageState extends State<TableOrderPage> {
                     quantity: quantity,
                   );
                   await _orderProductsStore.updateOrderProducts(updatedProduct);
-                  await _orderProductsStore.fetchOrderProducts(data.orderId!);
+                  await _orderProductsStore
+                      .fetchOrderProducts(_orderProductsStore.orderId!);
                 },
               );
             }
