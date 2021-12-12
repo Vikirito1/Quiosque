@@ -163,4 +163,27 @@ class ProductRepository implements IProductRepository {
       await connection.close();
     }
   }
+
+  @override
+  Future<List<int>> createMultipleProducts(
+      List<ProductDTO> productsList) async {
+    final Database connection = await _connection.openConnection();
+    try {
+      final List<int> addedProductIds = await connection.transaction<List<int>>(
+        (txn) async {
+          final List<int> addedIds = <int>[];
+          for (ProductDTO productDTO in productsList) {
+            final id = await txn.insert('products', productDTO.toJson());
+            addedIds.add(id);
+          }
+          return addedIds;
+        },
+      );
+      return addedProductIds;
+    } on DatabaseException catch (e) {
+      throw SqfliteExceptionHandler.handleException(e);
+    } finally {
+      await connection.close();
+    }
+  }
 }

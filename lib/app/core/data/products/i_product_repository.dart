@@ -6,6 +6,7 @@ abstract class IProductRepository {
   Future<List<ProductModel>> getAllProducts();
   Future<ProductModel> getProductById(int id);
   Future<int> createProduct(ProductDTO productDTO);
+  Future<List<int>> createMultipleProducts(List<ProductDTO> productsList);
   Future<int> updateProduct(ProductDTO updateProduct);
   Future<int> deleteProduct(int productId);
   Future<List<ProductModel>> getProductsByOrderId(int orderId);
