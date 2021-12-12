@@ -37,7 +37,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.lazySingleton<_i11.ProductsStore>(
       () => _i11.ProductsStore(get<_i7.IProductRepository>()));
   gh.lazySingleton<_i12.SplashController>(
-      () => _i12.SplashController(get<_i11.ProductsStore>()),
+      () => _i12.SplashController(
+          get<_i11.ProductsStore>(), get<_i7.IProductRepository>()),
       dispose: (i) => i.dispose());
   return get;
 }

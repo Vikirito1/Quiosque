@@ -39,22 +39,33 @@ class _TableOrderPageState extends State<TableOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Mesa ${data.tableNumber}'), actions: <Widget>[
-        Observer(
-          builder: (_) => _orderProductsStore.orderId != null
-              ? AddOrderProductWidget(
-                  availableProducts: _productsStore.allProducts!,
-                  selectedProducts: _orderProductsStore.orderProducts,
-                  onProductTap: (product) async {
-                    await _orderProductsStore.toggleAddRemoveProduct(
-                      product,
-                      _orderProductsStore.orderId!,
-                    );
-                  },
-                )
-              : const SizedBox.shrink(),
-        ),
-      ]),
+      appBar: AppBar(
+        title: Observer(builder: (_) {
+          if (_orderProductsStore.orderId == null) {
+            return Text('Mesa ${data.tableNumber}');
+          } else {
+            return Text(
+              'Mesa ${data.tableNumber} - R\$ ${_orderProductsStore.tableOrderTotal.toStringAsFixed(2)}',
+            );
+          }
+        }),
+        actions: <Widget>[
+          Observer(
+            builder: (_) => _orderProductsStore.orderId != null
+                ? AddOrderProductWidget(
+                    availableProducts: _productsStore.allProducts!,
+                    selectedProducts: _orderProductsStore.orderProducts,
+                    onProductTap: (product) async {
+                      await _orderProductsStore.toggleAddRemoveProduct(
+                        product,
+                        _orderProductsStore.orderId!,
+                      );
+                    },
+                  )
+                : const SizedBox.shrink(),
+          ),
+        ],
+      ),
       body: Center(
         child: Observer(
           builder: (_) {
@@ -77,7 +88,7 @@ class _TableOrderPageState extends State<TableOrderPage> {
                 orderProducts: orderProducts,
                 onQuantityChanged: (productId, quantity) async {
                   final OrderProductDTO updatedProduct = OrderProductDTO(
-                    ordersId: data.orderId!,
+                    ordersId: _orderProductsStore.orderId!,
                     productsId: productId,
                     quantity: quantity,
                   );

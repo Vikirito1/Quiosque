@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'product_dto.g.dart';
+
+@JsonSerializable()
 class ProductDTO {
   ProductDTO({
     this.id,
@@ -8,4 +13,9 @@ class ProductDTO {
   final int? id;
   final String product;
   final double price;
+
+  factory ProductDTO.fromJson(Map<String, dynamic> json) =>
+      _$ProductDTOFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProductDTOToJson(this);
 }
