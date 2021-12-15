@@ -52,19 +52,15 @@ class OrdersRepository implements IOrdersRepository {
   }
 
   @override
-  Future<int> closeOrder(OrderDTO closeOrderDTO) async {
+  Future<int> closeOrder(int orderId) async {
     final Database connection = await _connection.openConnection();
-    final int orderId = await connection.rawUpdate('''
+    final int affectedRows = await connection.rawUpdate('''
         UPDATE orders
-        SET table_number = ?, is_opened = ?
+        SET is_opened = ?
         WHERE id = ?
-      ''', [
-      closeOrderDTO.tableNumber,
-      closeOrderDTO.isOpened ? 0 : 1,
-      closeOrderDTO.id
-    ]);
+      ''', [0, orderId]);
 
-    return orderId;
+    return affectedRows;
   }
 
   @override

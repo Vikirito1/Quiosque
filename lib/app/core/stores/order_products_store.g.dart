@@ -118,9 +118,8 @@ mixin _$OrderProductsStore on _OrderProductsStoreBase, Store {
       AsyncAction('_OrderProductsStoreBase.closeOrder');
 
   @override
-  Future<void> closeOrder({required int tableNumber}) {
-    return _$closeOrderAsyncAction
-        .run(() => super.closeOrder(tableNumber: tableNumber));
+  Future<void> closeOrder() {
+    return _$closeOrderAsyncAction.run(() => super.closeOrder());
   }
 
   final _$_OrderProductsStoreBaseActionController =

@@ -73,8 +73,9 @@ class OrderWidget extends StatelessWidget {
         },
       )),
       ElevatedButton(
-          onPressed: onCloseOrder,
-          child: Text('Fechar Pedido - R\$ ${total.toStringAsFixed(2)}')),
+        onPressed: onCloseOrder,
+        child: Text('Fechar Pedido - R\$ ${total.toStringAsFixed(2)}'),
+      ),
     ]);
   }
 }

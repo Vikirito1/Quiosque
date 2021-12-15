@@ -99,7 +99,7 @@ class _TableOrderPageState extends State<TableOrderPage> {
                 },
                 total: _orderProductsStore.tableOrderTotal,
                 onCloseOrder: () {
-                  _orderProductsStore.closeOrder(tableNumber: data.tableNumber);
+                  _orderProductsStore.closeOrder();
                 },
               );
             }
