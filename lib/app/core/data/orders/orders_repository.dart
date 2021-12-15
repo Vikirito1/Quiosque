@@ -52,6 +52,22 @@ class OrdersRepository implements IOrdersRepository {
   }
 
   @override
+  Future<int> closeOrder(OrderDTO closeOrderDTO) async {
+    final Database connection = await _connection.openConnection();
+    final int orderId = await connection.rawUpdate('''
+        UPDATE orders
+        SET table_number = ?, is_opened = ?
+        WHERE id = ?
+      ''', [
+      closeOrderDTO.tableNumber,
+      closeOrderDTO.isOpened ? 0 : 1,
+      closeOrderDTO.id
+    ]);
+
+    return orderId;
+  }
+
+  @override
   Future<int> deleteOrder(int orderId) async {
     final Database connection = await _connection.openConnection();
     try {
