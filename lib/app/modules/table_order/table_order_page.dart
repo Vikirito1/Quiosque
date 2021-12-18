@@ -97,6 +97,10 @@ class _TableOrderPageState extends State<TableOrderPage> {
                   await _orderProductsStore
                       .fetchOrderProducts(_orderProductsStore.orderId!);
                 },
+                total: _orderProductsStore.tableOrderTotal,
+                onCloseOrder: () {
+                  _orderProductsStore.closeOrder();
+                },
               );
             }
           },

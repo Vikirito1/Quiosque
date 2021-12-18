@@ -52,6 +52,18 @@ class OrdersRepository implements IOrdersRepository {
   }
 
   @override
+  Future<int> closeOrder(int orderId) async {
+    final Database connection = await _connection.openConnection();
+    final int affectedRows = await connection.rawUpdate('''
+        UPDATE orders
+        SET is_opened = ?
+        WHERE id = ?
+      ''', [0, orderId]);
+
+    return affectedRows;
+  }
+
+  @override
   Future<int> deleteOrder(int orderId) async {
     final Database connection = await _connection.openConnection();
     try {

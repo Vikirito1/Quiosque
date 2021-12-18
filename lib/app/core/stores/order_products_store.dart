@@ -97,6 +97,15 @@ abstract class _OrderProductsStoreBase with Store {
     orderId = await _ordersRepository.createOrder(creatingOrder);
   }
 
+  @action
+  Future<void> closeOrder() async {
+    final int affectedRows = await _ordersRepository.closeOrder(orderId!);
+    if (affectedRows != 0) {
+      orderId = null;
+      orderProducts.clear();
+    }
+  }
+
   @computed
   double get tableOrderTotal => orderProducts
       .map((product) => product.price * product.quantity!)

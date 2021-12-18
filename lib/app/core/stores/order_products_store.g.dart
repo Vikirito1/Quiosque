@@ -114,6 +114,14 @@ mixin _$OrderProductsStore on _OrderProductsStoreBase, Store {
         .run(() => super.createOrder(tableNumber: tableNumber));
   }
 
+  final _$closeOrderAsyncAction =
+      AsyncAction('_OrderProductsStoreBase.closeOrder');
+
+  @override
+  Future<void> closeOrder() {
+    return _$closeOrderAsyncAction.run(() => super.closeOrder());
+  }
+
   final _$_OrderProductsStoreBaseActionController =
       ActionController(name: '_OrderProductsStoreBase');
 
