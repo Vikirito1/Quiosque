@@ -162,6 +162,8 @@ Observer(
 
 Geralmente estes pacotes são usados em classes "modelos" ou "entidades" que precisam ser convertidas de/para Map (equivalente ao JSON no Dart). Seu uso é bem simples: inicialmente basta adicionar a anotação `@JsonSerializable()` à classe a ser convertida e declarar os métodos _fromJson_ e _toJson_. Adicionalmente, como este recurso faz uso de geração automática de código, deve-se incluir o _.g.dart_ no arquivo. Um exemplo pode ser encontrado abaixo.
 
+Como agora existe o uso da geração automática de código, deve-se lembrar de usar um dos comandos descritos na seção sobre o [_build_runner_](#build_runner) para a criação do arquivo _.g.dart_ associado.
+
 ```dart
 // Arquivo product_model.dart
 import 'package:json_annotation/json_annotation.dart';
