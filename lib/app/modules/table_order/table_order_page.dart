@@ -69,9 +69,7 @@ class _TableOrderPageState extends State<TableOrderPage> {
       body: Center(
         child: Observer(
           builder: (_) {
-            if (_orderProductsStore.isLoading) {
-              return const CircularProgressIndicator();
-            } else if (_orderProductsStore.error != null) {
+            if (_orderProductsStore.error != null) {
               return Text(_orderProductsStore.error!);
             } else if (_orderProductsStore.orderId == null) {
               return NoOrderWidget(
