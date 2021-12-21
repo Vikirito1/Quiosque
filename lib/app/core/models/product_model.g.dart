@@ -10,7 +10,7 @@ ProductModel _$ProductModelFromJson(Map<String, dynamic> json) => ProductModel(
       id: json['id'] as int,
       product: json['product'] as String,
       price: (json['price'] as num).toDouble(),
-      quantity: json['quantity'] as int? ?? 0,
+      quantity: json['quantity'] as int? ?? 1,
     );
 
 Map<String, dynamic> _$ProductModelToJson(ProductModel instance) =>
