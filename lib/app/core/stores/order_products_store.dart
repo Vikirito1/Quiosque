@@ -74,13 +74,18 @@ abstract class _OrderProductsStoreBase with Store {
       if (!orderProducts.contains(productModel)) {
         await _productRepository.addProductToOrder(
           OrderProductDTO(
-              ordersId: orderId, productsId: productModel.id, quantity: 0),
+            ordersId: orderId,
+            productsId: productModel.id,
+            quantity: 1,
+          ),
         );
 
         _addProductToSelection(productModel);
       } else {
         await _productRepository.removeProductFromOrder(
-            orderId, productModel.id);
+          orderId,
+          productModel.id,
+        );
         _removeProductFromSelection(productModel);
       }
     } on SqfliteException catch (e) {

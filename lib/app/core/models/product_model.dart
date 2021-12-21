@@ -9,7 +9,7 @@ class ProductModel extends Equatable {
     required this.id,
     required this.product,
     required this.price,
-    this.quantity = 0,
+    this.quantity = 1,
   });
 
   final int id;
