@@ -10,6 +10,7 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     const Color _primaryColor = Color(0xFFF70106);
     return MaterialApp(
+      title: 'Kiosque Tô na Praia',
       theme: ThemeData(
         primaryColor: _primaryColor,
         appBarTheme: const AppBarTheme(
