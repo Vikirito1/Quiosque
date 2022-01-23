@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:quiosque/app/core/data/dtos/table_order_page_dto.dart';
 import 'package:quiosque/app/core/stores/orders_store.dart';
+import 'package:quiosque/app/core/widgets/menu_drawer_widget.dart';
 import 'package:quiosque/app/modules/home/home_controller.dart';
 import 'package:quiosque/app/modules/home/widgets/table_widget.dart';
 import 'package:quiosque/app/modules/table_order/table_order_page.dart';
@@ -44,6 +45,7 @@ class _HomePageState extends State<HomePage> {
           centerTitle: true,
           title: Text(title),
         ),
+        drawer: MenuDrawerWidget(routeName: HomePage.route),
         body: Observer(
           builder: (_) {
             if (ordersStore.loading) {
