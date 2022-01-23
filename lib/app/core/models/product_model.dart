@@ -12,14 +12,14 @@ class ProductModel extends Equatable {
     required this.product,
     required this.price,
     this.quantity = 1,
-    required this.shownInMenu,
+    required this.category,
   });
 
   final int id;
   final String product;
   final double price;
   final int? quantity;
-  final bool shownInMenu;
+  final String category;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       _$ProductModelFromJson(json);
