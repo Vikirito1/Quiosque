@@ -19,7 +19,14 @@ class ProductRepository implements IProductRepository {
     final Database connection = await _connection.openConnection();
     try {
       final results = await connection.rawQuery(
-          'SELECT id, product, price, shown_in_menu FROM products ORDER BY shown_in_menu DESC');
+        '''
+          SELECT p.id AS id, p.product AS product, p.price AS price, c.category AS category
+          FROM products p
+          JOIN categories c
+          ON p.categories_id = c.id
+          ORDER BY p.categories_id ASC
+        ''',
+      );
       return results
           .map((productMap) => ProductModel.fromJson(productMap))
           .toList();
@@ -41,11 +48,11 @@ class ProductRepository implements IProductRepository {
     final Database connection = await _connection.openConnection();
     try {
       final int productId = await connection.rawInsert(
-          'INSERT INTO products(product, price, shown_in_menu) VALUES (?, ?, ?)',
+          'INSERT INTO products(product, price, categories_id) VALUES (?, ?, ?)',
           [
             productDTO.product,
             productDTO.price,
-            productDTO.shownInMenu ? 1 : 0,
+            productDTO.categoriesId,
           ]);
       return productId;
     } on DatabaseException catch (e) {
@@ -75,12 +82,12 @@ class ProductRepository implements IProductRepository {
     try {
       final int updatedProductsCount = await connection.rawUpdate(''' 
         UPDATE products
-        SET product = ?, price = ?, shown_in_menu = ?
+        SET product = ?, price = ?, categories_id = ?
         WHERE id = ?
       ''', [
         updateProduct.product,
         updateProduct.price,
-        updateProduct.shownInMenu ? 1 : 0,
+        updateProduct.categoriesId,
         updateProduct.id,
       ]);
       return updatedProductsCount;
@@ -98,10 +105,12 @@ class ProductRepository implements IProductRepository {
       final List<Map<String, dynamic>> productsFromOrder =
           await connection.rawQuery(
         '''
-            SELECT p.id AS id, p.product AS product, p.price AS price, p.shown_in_menu AS shown_in_menu, ohp.quantity AS quantity
+            SELECT p.id AS id, p.product AS product, p.price AS price, c.category AS category, ohp.quantity AS quantity
             FROM products p
             JOIN orders_has_products ohp
             ON ohp.products_id = p.id
+            JOIN categories c
+            ON p.categories_id = c.id
             WHERE ohp.orders_id = ?
           ''',
         [orderId],

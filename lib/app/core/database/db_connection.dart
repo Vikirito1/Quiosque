@@ -8,7 +8,10 @@ class DbConnection {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       product TEXT NOT NULL,
       price REAL NOT NULL,
-      shown_in_menu INTEGER DEFAULT 0
+      categories_id INTEGER NOT NULL,
+      FOREIGN KEY (categories_id) REFERENCES categories(id)
+      ON UPDATE CASCADE
+      ON DELETE CASCADE
     );
   ''';
 
@@ -17,6 +20,13 @@ class DbConnection {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       table_number INTEGER NOT NULL,
       is_opened INTEGER DEFAULT 0
+    );
+  ''';
+
+  static const String _categoriesTableQuery = '''
+    CREATE TABLE IF NOT EXISTS categories(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      category TEXT NOT NULL
     );
   ''';
 
@@ -39,22 +49,13 @@ class DbConnection {
     final String path = '$databasesPath/quiosque.db';
     final Database database = await openDatabase(
       path,
-      version: 2,
+      version: 1,
       singleInstance: true,
       onCreate: (Database db, int version) async {
+        await db.execute(_categoriesTableQuery);
         await db.execute(_productsTableQuery);
         await db.execute(_ordersTableQuery);
         await db.execute(_ordersHasProductsTableQuery);
-      },
-      onUpgrade: (db, oldVersion, newVersion) async {
-        if (newVersion == 2) {
-          await db.execute(
-            '''
-              ALTER TABLE products
-              ADD COLUMN shown_in_menu INTEGER DEFAULT 0
-            ''',
-          );
-        }
       },
     );
     return database;

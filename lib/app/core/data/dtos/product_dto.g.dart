@@ -10,9 +10,7 @@ ProductDTO _$ProductDTOFromJson(Map<String, dynamic> json) => ProductDTO(
       id: json['id'] as int?,
       product: json['product'] as String,
       price: (json['price'] as num).toDouble(),
-      shownInMenu: json['shown_in_menu'] == null
-          ? false
-          : const BoolIntConverter().fromJson(json['shown_in_menu'] as int),
+      categoriesId: json['categories_id'] as int,
     );
 
 Map<String, dynamic> _$ProductDTOToJson(ProductDTO instance) =>
@@ -20,5 +18,5 @@ Map<String, dynamic> _$ProductDTOToJson(ProductDTO instance) =>
       'id': instance.id,
       'product': instance.product,
       'price': instance.price,
-      'shown_in_menu': const BoolIntConverter().toJson(instance.shownInMenu),
+      'categories_id': instance.categoriesId,
     };
