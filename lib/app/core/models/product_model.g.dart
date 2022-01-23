@@ -11,6 +11,8 @@ ProductModel _$ProductModelFromJson(Map<String, dynamic> json) => ProductModel(
       product: json['product'] as String,
       price: (json['price'] as num).toDouble(),
       quantity: json['quantity'] as int? ?? 1,
+      shownInMenu:
+          const BoolIntConverter().fromJson(json['shown_in_menu'] as int),
     );
 
 Map<String, dynamic> _$ProductModelToJson(ProductModel instance) =>
@@ -19,4 +21,5 @@ Map<String, dynamic> _$ProductModelToJson(ProductModel instance) =>
       'product': instance.product,
       'price': instance.price,
       'quantity': instance.quantity,
+      'shown_in_menu': const BoolIntConverter().toJson(instance.shownInMenu),
     };
