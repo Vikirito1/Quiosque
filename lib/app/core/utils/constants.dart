@@ -7,6 +7,7 @@ final List<CategoryDTO> categoriesData = [
   CategoryDTO(category: 'Peixes'),
   CategoryDTO(category: 'Frutos do Mar'),
   CategoryDTO(category: 'Guarnições'),
+  CategoryDTO(category: 'Especiais'),
 ];
 
 final List<ProductDTO> productData = [
