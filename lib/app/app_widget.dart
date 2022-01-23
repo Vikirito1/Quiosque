@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quiosque/app/modules/categories/categories_page.dart';
 import 'package:quiosque/app/modules/home/home_page.dart';
+import 'package:quiosque/app/modules/products/products_page.dart';
 import 'package:quiosque/app/modules/splash/splash_screen.dart';
 import 'package:quiosque/app/modules/table_order/table_order_page.dart';
 
@@ -37,6 +39,8 @@ class AppWidget extends StatelessWidget {
         SplashScreen.route: (context) => const SplashScreen(),
         HomePage.route: (context) => const HomePage(),
         TableOrderPage.route: (context) => const TableOrderPage(),
+        ProductsPage.route: (context) => const ProductsPage(),
+        CategoriesPage.route: (context) => const CategoriesPage(),
       },
     );
   }
