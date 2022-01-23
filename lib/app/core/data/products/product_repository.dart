@@ -18,8 +18,8 @@ class ProductRepository implements IProductRepository {
   Future<List<ProductModel>> getAllProducts() async {
     final Database connection = await _connection.openConnection();
     try {
-      final results =
-          await connection.rawQuery('SELECT id, product, price FROM products');
+      final results = await connection.rawQuery(
+          'SELECT id, product, price, shown_in_menu FROM products ORDER BY shown_in_menu DESC');
       return results
           .map((productMap) => ProductModel.fromJson(productMap))
           .toList();
@@ -40,11 +40,13 @@ class ProductRepository implements IProductRepository {
   Future<int> createProduct(ProductDTO productDTO) async {
     final Database connection = await _connection.openConnection();
     try {
-      final int productId = await connection
-          .rawInsert('INSERT INTO products(product, price) VALUES (?, ?)', [
-        productDTO.product,
-        productDTO.price,
-      ]);
+      final int productId = await connection.rawInsert(
+          'INSERT INTO products(product, price, shown_in_menu) VALUES (?, ?, ?)',
+          [
+            productDTO.product,
+            productDTO.price,
+            productDTO.shownInMenu ? 1 : 0,
+          ]);
       return productId;
     } on DatabaseException catch (e) {
       throw SqfliteExceptionHandler.handleException(e);
@@ -73,11 +75,12 @@ class ProductRepository implements IProductRepository {
     try {
       final int updatedProductsCount = await connection.rawUpdate(''' 
         UPDATE products
-        SET product = ?, price = ?
+        SET product = ?, price = ?, shown_in_menu = ?
         WHERE id = ?
       ''', [
         updateProduct.product,
         updateProduct.price,
+        updateProduct.shownInMenu ? 1 : 0,
         updateProduct.id,
       ]);
       return updatedProductsCount;
@@ -93,13 +96,16 @@ class ProductRepository implements IProductRepository {
     final Database connection = await _connection.openConnection();
     try {
       final List<Map<String, dynamic>> productsFromOrder =
-          await connection.rawQuery('''
-            SELECT p.id AS id, p.product AS product, p.price AS price, ohp.quantity AS quantity
+          await connection.rawQuery(
+        '''
+            SELECT p.id AS id, p.product AS product, p.price AS price, p.shown_in_menu AS shown_in_menu, ohp.quantity AS quantity
             FROM products p
             JOIN orders_has_products ohp
             ON ohp.products_id = p.id
             WHERE ohp.orders_id = ?
-          ''', [orderId]);
+          ''',
+        [orderId],
+      );
       return productsFromOrder
           .map((productMap) => ProductModel.fromJson(productMap))
           .toList();

@@ -7,7 +7,8 @@ class DbConnection {
     CREATE TABLE IF NOT EXISTS products (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       product TEXT NOT NULL,
-      price REAL NOT NULL
+      price REAL NOT NULL,
+      shown_in_menu INTEGER DEFAULT 0
     );
   ''';
 
@@ -38,12 +39,22 @@ class DbConnection {
     final String path = '$databasesPath/quiosque.db';
     final Database database = await openDatabase(
       path,
-      version: 1,
+      version: 2,
       singleInstance: true,
       onCreate: (Database db, int version) async {
         await db.execute(_productsTableQuery);
         await db.execute(_ordersTableQuery);
         await db.execute(_ordersHasProductsTableQuery);
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (newVersion == 2) {
+          await db.execute(
+            '''
+              ALTER TABLE products
+              ADD COLUMN shown_in_menu INTEGER DEFAULT 0
+            ''',
+          );
+        }
       },
     );
     return database;

@@ -1,10 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
+import 'package:quiosque/app/core/utils/bool_int_converter.dart';
 
 part 'order_model.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-@_BoolIntConverter()
+@BoolIntConverter()
 class OrderModel {
   OrderModel({
     required this.id,
@@ -22,18 +23,4 @@ class OrderModel {
       _$OrderModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderModelToJson(this);
-}
-
-class _BoolIntConverter implements JsonConverter<bool, int> {
-  const _BoolIntConverter();
-
-  @override
-  bool fromJson(int json) {
-    return json == 1;
-  }
-
-  @override
-  int toJson(bool object) {
-    return object ? 1 : 0;
-  }
 }
