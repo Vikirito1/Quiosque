@@ -33,6 +33,27 @@ class AppWidget extends StatelessWidget {
             primary: _primaryColor,
           ),
         ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            primary: _primaryColor,
+            side: const BorderSide(
+              color: _primaryColor,
+            ),
+          ),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          floatingLabelStyle: TextStyle(color: _primaryColor),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: _primaryColor,
+            ),
+          ),
+        ),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: _primaryColor,
+          selectionHandleColor: _primaryColor,
+          selectionColor: _primaryColor.withAlpha(60),
+        ),
       ),
       initialRoute: SplashScreen.route,
       routes: {
