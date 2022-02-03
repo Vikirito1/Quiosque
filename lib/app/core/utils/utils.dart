@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiosque/app/core/data/dtos/category_dto.dart';
 import 'package:quiosque/app/core/models/category_model.dart';
 import 'package:quiosque/app/modules/categories/widgets/edit_category_widget.dart';
 
@@ -6,6 +7,7 @@ class Utils {
   static void showCategoryEditor({
     required BuildContext context,
     CategoryModel? category,
+    void Function(CategoryDTO value)? onSave,
   }) {
     showBottomSheet(
       constraints: BoxConstraints(
@@ -24,7 +26,7 @@ class Utils {
       context: context,
       builder: (context) => EditCategoryWidget(
         onCancel: () => Navigator.pop(context),
-        onSave: () => {},
+        onSave: onSave,
         category: category,
       ),
     );

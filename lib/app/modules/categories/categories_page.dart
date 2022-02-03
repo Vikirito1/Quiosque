@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:quiosque/app/core/models/category_model.dart';
-import 'package:quiosque/app/core/stores/categories_store.dart';
+import 'package:quiosque/app/core/utils/utils.dart';
 import 'package:quiosque/app/core/widgets/menu_drawer_widget.dart';
+import 'package:quiosque/app/modules/categories/categories_controller.dart';
 
 import 'widgets/add_category_widget.dart';
 import 'widgets/category_tile_widget.dart';
@@ -18,11 +19,11 @@ class CategoriesPage extends StatefulWidget {
 }
 
 class _CategoriesPageState extends State<CategoriesPage> {
-  late final CategoriesStore categoriesStore;
+  late final CategoriesController controller;
 
   @override
   void initState() {
-    categoriesStore = GetIt.I<CategoriesStore>();
+    controller = GetIt.I<CategoriesController>();
     super.initState();
   }
 
@@ -31,27 +32,34 @@ class _CategoriesPageState extends State<CategoriesPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Categorias'),
-        actions: const [
-          AddCategoryWidget(),
+        actions: [
+          AddCategoryWidget(
+            onPressed: () => Utils.showCategoryEditor(context: context),
+          ),
         ],
       ),
       drawer: MenuDrawerWidget(routeName: CategoriesPage.route),
       body: Center(
         child: Observer(
           builder: (context) {
-            if (categoriesStore.isLoading) {
+            if (controller.categoriesStore.isLoading) {
               return const CircularProgressIndicator();
-            } else if (categoriesStore.error != null) {
-              return Text(categoriesStore.error!);
+            } else if (controller.categoriesStore.error != null) {
+              return Text(controller.categoriesStore.error!);
             } else {
               return ListView.builder(
-                itemCount: categoriesStore.allCategories!.length,
+                itemCount: controller.categoriesStore.allCategories!.length,
                 itemBuilder: (_, index) {
                   final CategoryModel category =
-                      categoriesStore.allCategories![index];
+                      controller.categoriesStore.allCategories![index];
                   return CategoryTileWidget(
                     category: category,
                     onDelete: () => {},
+                    onEdit: () => Utils.showCategoryEditor(
+                      context: context,
+                      category: category,
+                      onSave: (value) => {},
+                    ),
                   );
                 },
               );

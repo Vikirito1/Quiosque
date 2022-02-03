@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiosque/app/core/data/dtos/category_dto.dart';
 import 'package:quiosque/app/core/models/category_model.dart';
 
 class EditCategoryWidget extends StatelessWidget {
@@ -8,6 +9,7 @@ class EditCategoryWidget extends StatelessWidget {
     this.onCancel,
     this.category,
   }) : super(key: key) {
+    _formKey = GlobalKey<FormState>();
     if (category == null) {
       _controller = TextEditingController();
     } else {
@@ -15,50 +17,69 @@ class EditCategoryWidget extends StatelessWidget {
     }
   }
 
-  final Function()? onSave;
+  final Function(CategoryDTO updatedCategory)? onSave;
   final Function()? onCancel;
   final CategoryModel? category;
   late final TextEditingController? _controller;
+  late final GlobalKey<FormState> _formKey;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        16.0,
-        30.0,
-        16.0,
-        50.0,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            category != null ? 'Editar categoria' : 'Criar categoria',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-          const SizedBox(height: 20.0),
-          TextFormField(
-            controller: _controller,
-            decoration: const InputDecoration(
-              labelText: 'Categoria',
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          16.0,
+          30.0,
+          16.0,
+          50.0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              category != null ? 'Editar categoria' : 'Criar categoria',
+              style: Theme.of(context).textTheme.headline6,
             ),
-          ),
-          const SizedBox(height: 50.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              OutlinedButton(
-                onPressed: onCancel,
-                child: const Text('Cancelar'),
+            const SizedBox(height: 20.0),
+            TextFormField(
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Este campo precisa ser preenchido';
+                } else {
+                  return null;
+                }
+              },
+              controller: _controller,
+              decoration: const InputDecoration(
+                labelText: 'Categoria',
               ),
-              ElevatedButton(
-                onPressed: onSave,
-                child: const Text('Salvar'),
-              ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(height: 50.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                OutlinedButton(
+                  onPressed: onCancel,
+                  child: const Text('Cancelar'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      final CategoryDTO updatedCategory = CategoryDTO(
+                        id: category!.id,
+                        category: _controller!.text,
+                      );
+                      onSave?.call(updatedCategory);
+                    }
+                  },
+                  child: const Text('Salvar'),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

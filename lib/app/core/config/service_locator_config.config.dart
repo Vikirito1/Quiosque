@@ -7,6 +7,7 @@
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
+import '../../modules/categories/categories_controller.dart' as _i16;
 import '../../modules/home/home_controller.dart' as _i4;
 import '../../modules/splash/splash_controller.dart' as _i15;
 import '../data/categories/categories_repository.dart' as _i6;
@@ -50,5 +51,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
           get<_i14.CategoriesStore>(),
           get<_i5.ICategoriesRepository>()),
       dispose: (i) => i.dispose());
+  gh.lazySingleton<_i16.CategoriesController>(
+      () => _i16.CategoriesController(get<_i14.CategoriesStore>()));
   return get;
 }
