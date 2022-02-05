@@ -7,9 +7,10 @@
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import '../../modules/categories/categories_controller.dart' as _i16;
+import '../../modules/categories/categories_controller.dart' as _i17;
 import '../../modules/home/home_controller.dart' as _i4;
-import '../../modules/splash/splash_controller.dart' as _i15;
+import '../../modules/products/products_controller.dart' as _i15;
+import '../../modules/splash/splash_controller.dart' as _i16;
 import '../data/categories/categories_repository.dart' as _i6;
 import '../data/categories/i_categories_repository.dart' as _i5;
 import '../data/orders/i_orders_repository.dart' as _i7;
@@ -44,14 +45,16 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       () => _i13.ProductsStore(get<_i9.IProductRepository>()));
   gh.lazySingleton<_i14.CategoriesStore>(
       () => _i14.CategoriesStore(get<_i5.ICategoriesRepository>()));
-  gh.lazySingleton<_i15.SplashController>(
-      () => _i15.SplashController(
+  gh.lazySingleton<_i15.ProductsController>(() => _i15.ProductsController(
+      get<_i13.ProductsStore>(), get<_i14.CategoriesStore>()));
+  gh.lazySingleton<_i16.SplashController>(
+      () => _i16.SplashController(
           get<_i13.ProductsStore>(),
           get<_i9.IProductRepository>(),
           get<_i14.CategoriesStore>(),
           get<_i5.ICategoriesRepository>()),
       dispose: (i) => i.dispose());
-  gh.lazySingleton<_i16.CategoriesController>(
-      () => _i16.CategoriesController(get<_i14.CategoriesStore>()));
+  gh.lazySingleton<_i17.CategoriesController>(
+      () => _i17.CategoriesController(get<_i14.CategoriesStore>()));
   return get;
 }

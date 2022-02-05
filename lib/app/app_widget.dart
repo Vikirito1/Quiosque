@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:quiosque/app/modules/categories/categories_page.dart';
 import 'package:quiosque/app/modules/home/home_page.dart';
 import 'package:quiosque/app/modules/products/products_page.dart';
@@ -10,6 +11,7 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Intl.defaultLocale = 'pt_BR';
     const Color _primaryColor = Color(0xFFF70106);
     return MaterialApp(
       title: 'Kiosque Tô na Praia',
@@ -53,6 +55,10 @@ class AppWidget extends StatelessWidget {
           cursorColor: _primaryColor,
           selectionHandleColor: _primaryColor,
           selectionColor: _primaryColor.withAlpha(60),
+        ),
+        listTileTheme: const ListTileThemeData(
+          selectedTileColor: _primaryColor,
+          selectedColor: _primaryColor,
         ),
       ),
       initialRoute: SplashScreen.route,
