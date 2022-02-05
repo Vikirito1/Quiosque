@@ -8,6 +8,7 @@ import 'package:quiosque/app/modules/categories/categories_controller.dart';
 
 import 'widgets/add_category_widget.dart';
 import 'widgets/category_tile_widget.dart';
+import 'widgets/exclusion_confirmation_dialog_widget.dart';
 
 class CategoriesPage extends StatefulWidget {
   const CategoriesPage({Key? key}) : super(key: key);
@@ -60,9 +61,17 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 itemBuilder: (_, index) {
                   final CategoryModel category =
                       controller.categoriesStore.allCategories![index];
+
                   return CategoryTileWidget(
                     category: category,
-                    onDelete: () => {},
+                    onDelete: (categoryModel) async {
+                      final bool? isConfirmed = await showDialog<bool>(
+                        context: context,
+                        builder: (context) =>
+                            const ExclusionConfirmationDialogWidget(),
+                      );
+                      controller.onDeletePressed(categoryModel, isConfirmed);
+                    },
                     onEdit: () => Utils.showCategoryEditor(
                       context: context,
                       category: category,

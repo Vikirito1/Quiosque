@@ -10,7 +10,7 @@ class CategoryTileWidget extends StatelessWidget {
   }) : super(key: key);
 
   final CategoryModel category;
-  final Function()? onDelete;
+  final Function(CategoryModel value)? onDelete;
   final Function()? onEdit;
 
   @override
@@ -25,7 +25,7 @@ class CategoryTileWidget extends StatelessWidget {
       trailing: IconButton(
         icon: const Icon(Icons.delete),
         color: Theme.of(context).primaryColor,
-        onPressed: onDelete,
+        onPressed: () => onDelete?.call(category),
       ),
     );
   }

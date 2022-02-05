@@ -25,6 +25,8 @@ class EditCategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return Form(
       key: _formKey,
       child: Padding(
@@ -60,21 +62,30 @@ class EditCategoryWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                OutlinedButton(
-                  onPressed: onCancel,
-                  child: const Text('Cancelar'),
+                SizedBox(
+                  width: screenWidth * 0.3,
+                  child: OutlinedButton(
+                    onPressed: onCancel,
+                    child: const Text('Cancelar'),
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      final CategoryDTO updatedCategory = CategoryDTO(
-                        id: category?.id,
-                        category: _controller!.text,
-                      );
-                      onSave?.call(updatedCategory);
-                    }
-                  },
-                  child: const Text('Salvar'),
+                SizedBox(
+                  width: screenWidth * 0.3,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0.0,
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        final CategoryDTO updatedCategory = CategoryDTO(
+                          id: category?.id,
+                          category: _controller!.text,
+                        );
+                        onSave?.call(updatedCategory);
+                      }
+                    },
+                    child: const Text('Salvar'),
+                  ),
                 ),
               ],
             ),

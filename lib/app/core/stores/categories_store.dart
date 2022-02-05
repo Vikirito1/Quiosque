@@ -63,4 +63,14 @@ abstract class _CategoriesStoreBase with Store {
       error = e.message;
     }
   }
+
+  Future<void> deleteCategory(CategoryModel categoryModel) async {
+    try {
+      error = null;
+      await _categoriesRepository.deleteCategory(categoryModel.id);
+      await _fetchAllCategories();
+    } on SqfliteException catch (e) {
+      error = e.message;
+    }
+  }
 }
