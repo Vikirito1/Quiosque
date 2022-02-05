@@ -15,4 +15,14 @@ class CategoryDTO {
   factory CategoryDTO.fromJson(Map<String, dynamic> json) =>
       _$CategoryDTOFromJson(json);
   Map<String, dynamic> toJson() => _$CategoryDTOToJson(this);
+
+  CategoryDTO copyWith({
+    int? id,
+    String? category,
+  }) {
+    return CategoryDTO(
+      id: id ?? this.id,
+      category: category ?? this.category,
+    );
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:quiosque/app/core/data/categories/i_categories_repository.dart';
+import 'package:quiosque/app/core/data/dtos/category_dto.dart';
 import 'package:quiosque/app/core/exceptions/sqflite_exceptions.dart';
 import 'package:quiosque/app/core/models/category_model.dart';
 
@@ -41,5 +42,35 @@ abstract class _CategoriesStoreBase with Store {
     final List<CategoryModel> results =
         await _categoriesRepository.getAllCategories();
     allCategories = ObservableList.of(results);
+  }
+
+  Future<void> createNewCategory(CategoryDTO categoryDTO) async {
+    try {
+      error = null;
+      await _categoriesRepository.createCategory(categoryDTO);
+      await _fetchAllCategories();
+    } on SqfliteException catch (e) {
+      error = e.message;
+    }
+  }
+
+  Future<void> updateCategory(CategoryDTO categoryDTO) async {
+    try {
+      error = null;
+      await _categoriesRepository.updateCategory(categoryDTO);
+      await _fetchAllCategories();
+    } on SqfliteException catch (e) {
+      error = e.message;
+    }
+  }
+
+  Future<void> deleteCategory(CategoryModel categoryModel) async {
+    try {
+      error = null;
+      await _categoriesRepository.deleteCategory(categoryModel.id);
+      await _fetchAllCategories();
+    } on SqfliteException catch (e) {
+      error = e.message;
+    }
   }
 }

@@ -31,8 +31,11 @@ void main() {
   });
 
   test('Should return id when a new product is added', () async {
-    final ProductDTO newProduct =
-        ProductDTO(product: 'Guaraná Antártica', price: 4.99);
+    final ProductDTO newProduct = ProductDTO(
+      product: 'Guaraná Antártica',
+      price: 4.99,
+      categoriesId: 1,
+    );
     when(() => databaseMock
             .rawInsert(any(), [newProduct.product, newProduct.price]))
         .thenAnswer((_) async => 4);
@@ -53,8 +56,12 @@ void main() {
 
   test('Should return the number of affected lines when a product is updated',
       () async {
-    final ProductDTO updatedProduct =
-        ProductDTO(product: 'Guaraná Antártica', price: 3.99, id: 4);
+    final ProductDTO updatedProduct = ProductDTO(
+      product: 'Guaraná Antártica',
+      price: 3.99,
+      id: 4,
+      categoriesId: 1,
+    );
     when(() => databaseMock.rawUpdate(any(), [
           updatedProduct.product,
           updatedProduct.price,
