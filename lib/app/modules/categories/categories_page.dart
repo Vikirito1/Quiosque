@@ -33,8 +33,16 @@ class _CategoriesPageState extends State<CategoriesPage> {
       appBar: AppBar(
         title: const Text('Categorias'),
         actions: [
-          AddCategoryWidget(
-            onPressed: () => Utils.showCategoryEditor(context: context),
+          Builder(
+            // This builder method was added just to "force" the widget below to have a Scaffold as ancestor
+            builder: (context) {
+              return AddCategoryWidget(
+                onPressed: () => Utils.showCategoryEditor(
+                  context: context,
+                  onSave: controller.onAddSavePressed,
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -58,7 +66,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     onEdit: () => Utils.showCategoryEditor(
                       context: context,
                       category: category,
-                      onSave: (value) => {},
+                      onSave: controller.onEditSavePressed,
                     ),
                   );
                 },

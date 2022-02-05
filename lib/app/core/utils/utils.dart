@@ -26,7 +26,10 @@ class Utils {
       context: context,
       builder: (context) => EditCategoryWidget(
         onCancel: () => Navigator.pop(context),
-        onSave: onSave,
+        onSave: (value) {
+          onSave?.call(value);
+          Navigator.pop(context);
+        },
         category: category,
       ),
     );

@@ -69,6 +69,8 @@ class CategoriesRepository implements ICategoriesRepository {
       final updatedCategoriesCount = await connection.update(
         'categories',
         categoryDTO.toJson(),
+        where: 'id = ?',
+        whereArgs: [categoryDTO.id],
       );
       return updatedCategoriesCount;
     } on DatabaseException catch (e) {

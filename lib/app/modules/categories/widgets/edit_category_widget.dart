@@ -17,8 +17,8 @@ class EditCategoryWidget extends StatelessWidget {
     }
   }
 
-  final Function(CategoryDTO updatedCategory)? onSave;
-  final Function()? onCancel;
+  final void Function(CategoryDTO updatedCategory)? onSave;
+  final void Function()? onCancel;
   final CategoryModel? category;
   late final TextEditingController? _controller;
   late final GlobalKey<FormState> _formKey;
@@ -68,7 +68,7 @@ class EditCategoryWidget extends StatelessWidget {
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
                       final CategoryDTO updatedCategory = CategoryDTO(
-                        id: category!.id,
+                        id: category?.id,
                         category: _controller!.text,
                       );
                       onSave?.call(updatedCategory);
