@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:quiosque/app/core/models/category_model.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/core/widgets/menu_drawer_widget.dart';
+import 'package:quiosque/app/modules/products/pages/product_management_page.dart';
 import 'package:quiosque/app/modules/products/products_controller.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -30,9 +31,13 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Produtos'),
-      ),
+      appBar: AppBar(title: const Text('Produtos'), actions: [
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () =>
+              Navigator.pushNamed(context, ProductManagementPage.route),
+        ),
+      ]),
       drawer: MenuDrawerWidget(routeName: ProductsPage.route),
       body: Center(
         child: Observer(
@@ -65,6 +70,11 @@ class _ProductsPageState extends State<ProductsPage> {
                             title: Text(product.product),
                             subtitle: Text(product.category),
                             trailing: Text(moneyFormat.format(product.price)),
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              ProductManagementPage.route,
+                              arguments: product,
+                            ),
                           ),
                         )
                         .toList(),

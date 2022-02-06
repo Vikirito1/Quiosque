@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/modules/categories/categories_page.dart';
 import 'package:quiosque/app/modules/home/home_page.dart';
+import 'package:quiosque/app/modules/products/pages/product_management_page.dart';
 import 'package:quiosque/app/modules/products/products_page.dart';
 import 'package:quiosque/app/modules/splash/splash_screen.dart';
 import 'package:quiosque/app/modules/table_order/table_order_page.dart';
@@ -68,6 +70,17 @@ class AppWidget extends StatelessWidget {
         TableOrderPage.route: (context) => const TableOrderPage(),
         ProductsPage.route: (context) => const ProductsPage(),
         CategoriesPage.route: (context) => const CategoriesPage(),
+        ProductManagementPage.route: (context) {
+          final routeArgument = ModalRoute.of(context)?.settings.arguments;
+          if (routeArgument != null) {
+            final ProductModel? product = routeArgument as ProductModel?;
+            return ProductManagementPage(
+              product: product,
+            );
+          } else {
+            return const ProductManagementPage();
+          }
+        },
       },
     );
   }
