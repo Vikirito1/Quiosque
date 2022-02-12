@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:quiosque/app/core/data/dtos/product_dto.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/core/widgets/cancel_button_widget.dart';
+import 'package:quiosque/app/core/widgets/confirmation_dialog_widget.dart';
 import 'package:quiosque/app/modules/products/pages/product_management_controller.dart';
 
 import '../../../core/widgets/confirm_button_widget.dart';
@@ -24,6 +25,7 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
   late final TextEditingController product$;
   late final TextEditingController price$;
   late final CurrencyTextInputFormatter formatter;
+  late final GlobalKey<FormState> formKey;
 
   @override
   void initState() {
@@ -36,6 +38,7 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
       price$.text = formatter.format(widget.product!.price.toStringAsFixed(2));
       controller.setSelectedCategoryByName(widget.product!.category);
     }
+    formKey = GlobalKey<FormState>();
     super.initState();
   }
 
@@ -58,23 +61,16 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
                   onPressed: () async {
                     await showDialog(
                       context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Deseja continuar?'),
-                        content: const Text(
-                            'Este processo é irreversível, portanto não poderá ser desfeito.'),
-                        actions: [
-                          CancelButtonWidget(
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                          ConfirmButtonWidget(
-                            onPressed: () {
-                              controller.onDeleteButtonPressed(widget.product!);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                        actionsAlignment: MainAxisAlignment.spaceAround,
+                      builder: (context) => ConfirmationDialogWidget(
+                        titleText: 'Remover produto',
+                        contentText:
+                            'Este processo é irreversível. Deseja mesmo continuar?',
+                        onCancelPressed: () => Navigator.pop(context),
+                        onConfirmPressed: () {
+                          controller.onDeleteButtonPressed(widget.product!);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
                       ),
                     );
                   },
@@ -84,63 +80,89 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFormField(
-              controller: product$,
-              decoration: const InputDecoration(
-                labelText: 'Produto',
-              ),
-            ),
-            TextFormField(
-              controller: price$,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                formatter,
-              ],
-              decoration: const InputDecoration(
-                labelText: 'Preço',
-              ),
-            ),
-            const SizedBox(height: 10.0),
-            Observer(
-              builder: (context) => DropdownButton<int>(
-                value: controller.selectedCategoryId,
-                items: controller.allCategories
-                    .map(
-                      (category) => DropdownMenuItem(
-                        child: Text(category.category),
-                        value: category.id,
-                      ),
-                    )
-                    .toList(),
-                onChanged: controller.setSelectedCategoryId,
-                hint: const Text('Categoria'),
-              ),
-            ),
-            const SizedBox(height: 30.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                CancelButtonWidget(
-                  onPressed: () => Navigator.pop(context),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                controller: product$,
+                decoration: const InputDecoration(
+                  labelText: 'Produto',
                 ),
-                ConfirmButtonWidget(
-                  onPressed: () async {
-                    final ProductDTO productDTO = ProductDTO(
-                      id: widget.product?.id,
-                      product: product$.text,
-                      price: formatter.getUnformattedValue().toDouble(),
-                      categoriesId: controller.selectedCategoryId!,
-                    );
-                    await controller.onConfirmButtonPressed(productDTO);
-                    Navigator.pop(context);
+                validator: (value) {
+                  if (value?.isEmpty ?? true) {
+                    return 'O produto precisa de um nome';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              TextFormField(
+                controller: price$,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  formatter,
+                ],
+                decoration: const InputDecoration(
+                  labelText: 'Preço',
+                ),
+                validator: (value) {
+                  if (value?.isEmpty ?? true) {
+                    return 'O produto precisa de um preço';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              const SizedBox(height: 10.0),
+              Observer(
+                builder: (context) => DropdownButtonFormField<int>(
+                  value: controller.selectedCategoryId,
+                  items: controller.allCategories
+                      .map(
+                        (category) => DropdownMenuItem(
+                          child: Text(category.category),
+                          value: category.id,
+                        ),
+                      )
+                      .toList(),
+                  onChanged: controller.setSelectedCategoryId,
+                  hint: const Text('Categoria'),
+                  validator: (value) {
+                    if (value == null) {
+                      return 'O produto precisa de uma categoria';
+                    } else {
+                      return null;
+                    }
                   },
                 ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: 30.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CancelButtonWidget(
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  ConfirmButtonWidget(
+                    onPressed: () async {
+                      if (formKey.currentState?.validate() ?? false) {
+                        final ProductDTO productDTO = ProductDTO(
+                          id: widget.product?.id,
+                          product: product$.text,
+                          price: formatter.getUnformattedValue().toDouble(),
+                          categoriesId: controller.selectedCategoryId!,
+                        );
+                        await controller.onConfirmButtonPressed(productDTO);
+                        Navigator.pop(context);
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
