@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiosque/app/core/data/dtos/category_dto.dart';
 import 'package:quiosque/app/core/models/category_model.dart';
+import 'package:quiosque/app/core/widgets/custom_text_form_field_widget.dart';
 
 class EditCategoryWidget extends StatefulWidget {
   EditCategoryWidget({
@@ -57,7 +58,7 @@ class _EditCategoryWidgetState extends State<EditCategoryWidget> {
               style: Theme.of(context).textTheme.headline6,
             ),
             const SizedBox(height: 20.0),
-            TextFormField(
+            CustomTextFormFieldWidget(
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Este campo precisa ser preenchido';
@@ -66,9 +67,7 @@ class _EditCategoryWidgetState extends State<EditCategoryWidget> {
                 }
               },
               controller: widget._controller,
-              decoration: const InputDecoration(
-                labelText: 'Categoria',
-              ),
+              labelText: 'Categoria',
             ),
             const SizedBox(height: 50.0),
             Row(
