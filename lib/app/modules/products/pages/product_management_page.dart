@@ -6,6 +6,7 @@ import 'package:quiosque/app/core/data/dtos/product_dto.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/core/widgets/cancel_button_widget.dart';
 import 'package:quiosque/app/core/widgets/confirmation_dialog_widget.dart';
+import 'package:quiosque/app/core/widgets/custom_text_form_field_widget.dart';
 import 'package:quiosque/app/modules/products/pages/product_management_controller.dart';
 
 import '../../../core/widgets/confirm_button_widget.dart';
@@ -85,11 +86,9 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
+              CustomTextFormFieldWidget(
                 controller: product$,
-                decoration: const InputDecoration(
-                  labelText: 'Produto',
-                ),
+                labelText: 'Produto',
                 validator: (value) {
                   if (value?.isEmpty ?? true) {
                     return 'O produto precisa de um nome';
@@ -98,15 +97,13 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
                   }
                 },
               ),
-              TextFormField(
+              CustomTextFormFieldWidget(
                 controller: price$,
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   formatter,
                 ],
-                decoration: const InputDecoration(
-                  labelText: 'Preço',
-                ),
+                labelText: 'Preço',
                 validator: (value) {
                   if (value?.isEmpty ?? true) {
                     return 'O produto precisa de um preço';
