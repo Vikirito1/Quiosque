@@ -16,7 +16,7 @@ abstract class _ProductsStoreBase with Store {
   final IProductRepository _productRepository;
 
   @observable
-  ObservableList<ProductModel>? allProducts;
+  ObservableList<ProductModel> allProducts = <ProductModel>[].asObservable();
 
   @observable
   bool isLoading = false;

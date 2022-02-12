@@ -20,8 +20,8 @@ class SplashController {
   Future<void> initializeDependencies() async {
     await _productsStore.fetchAllProducts();
     await _categoriesStore.fetchAllCategories();
-    if (_productsStore.allProducts!.isEmpty &&
-        _categoriesStore.allCategories!.isEmpty) {
+    if (_productsStore.allProducts.isEmpty &&
+        _categoriesStore.allCategories.isEmpty) {
       await _categoriesRepository.createMultipleCategories(categoriesData);
       await _productRepository.createMultipleProducts(productData);
       await _categoriesStore.fetchAllCategories();

@@ -53,7 +53,7 @@ class _TableOrderPageState extends State<TableOrderPage> {
           Observer(
             builder: (_) => _orderProductsStore.orderId != null
                 ? AddOrderProductWidget(
-                    availableProducts: _productsStore.allProducts!,
+                    availableProducts: _productsStore.allProducts,
                     selectedProducts: _orderProductsStore.orderProducts,
                     onProductTap: (product) async {
                       await _orderProductsStore.toggleAddRemoveProduct(

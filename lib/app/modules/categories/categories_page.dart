@@ -57,10 +57,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
               return Text(controller.categoriesStore.error!);
             } else {
               return ListView.builder(
-                itemCount: controller.categoriesStore.allCategories!.length,
+                itemCount: controller.categoriesStore.allCategories.length,
                 itemBuilder: (_, index) {
                   final CategoryModel category =
-                      controller.categoriesStore.allCategories![index];
+                      controller.categoriesStore.allCategories[index];
 
                   return CategoryTileWidget(
                     category: category,

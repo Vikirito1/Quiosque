@@ -16,7 +16,8 @@ abstract class _CategoriesStoreBase with Store {
   final ICategoriesRepository _categoriesRepository;
 
   @observable
-  ObservableList<CategoryModel>? allCategories;
+  ObservableList<CategoryModel> allCategories =
+      <CategoryModel>[].asObservable();
 
   @observable
   bool isLoading = false;
