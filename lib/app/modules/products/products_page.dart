@@ -31,13 +31,17 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Produtos'), actions: [
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () =>
-              Navigator.pushNamed(context, ProductManagementPage.route),
-        ),
-      ]),
+      appBar: AppBar(
+        title: const Text('Produtos'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () =>
+                Navigator.pushNamed(context, ProductManagementPage.route),
+          ),
+        ],
+      ),
       drawer: MenuDrawerWidget(routeName: ProductsPage.route),
       body: Center(
         child: Observer(

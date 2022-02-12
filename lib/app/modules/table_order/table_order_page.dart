@@ -49,6 +49,7 @@ class _TableOrderPageState extends State<TableOrderPage> {
             );
           }
         }),
+        centerTitle: true,
         actions: <Widget>[
           Observer(
             builder: (_) => _orderProductsStore.orderId != null

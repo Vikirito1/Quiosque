@@ -33,6 +33,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Categorias'),
+        centerTitle: true,
         actions: [
           Builder(
             // This builder method was added just to "force" the widget below to have a Scaffold as ancestor
