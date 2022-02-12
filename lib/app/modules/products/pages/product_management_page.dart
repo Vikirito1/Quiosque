@@ -55,6 +55,7 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.product?.product ?? 'Adicionar produto'),
+        centerTitle: true,
         actions: widget.product != null
             ? [
                 IconButton(
