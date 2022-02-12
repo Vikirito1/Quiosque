@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quiosque/app/core/data/dtos/category_dto.dart';
 import 'package:quiosque/app/core/models/category_model.dart';
 import 'package:quiosque/app/core/widgets/custom_text_form_field_widget.dart';
+import 'package:quiosque/app/modules/categories/widgets/actions_widget.dart';
 
 class EditCategoryWidget extends StatefulWidget {
   EditCategoryWidget({
@@ -38,8 +39,6 @@ class _EditCategoryWidgetState extends State<EditCategoryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-
     return Form(
       key: widget._formKey,
       child: Padding(
@@ -70,35 +69,17 @@ class _EditCategoryWidgetState extends State<EditCategoryWidget> {
               labelText: 'Categoria',
             ),
             const SizedBox(height: 50.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(
-                  width: screenWidth * 0.3,
-                  child: OutlinedButton(
-                    onPressed: widget.onCancel,
-                    child: const Text('Cancelar'),
-                  ),
-                ),
-                SizedBox(
-                  width: screenWidth * 0.3,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0.0,
-                    ),
-                    onPressed: () {
-                      if (widget._formKey.currentState?.validate() ?? false) {
-                        final CategoryDTO updatedCategory = CategoryDTO(
-                          id: widget.category?.id,
-                          category: widget._controller!.text,
-                        );
-                        widget.onSave?.call(updatedCategory);
-                      }
-                    },
-                    child: const Text('Salvar'),
-                  ),
-                ),
-              ],
+            ActionsWidget(
+              onCancelPressed: widget.onCancel,
+              onConfirmPressed: () {
+                if (widget._formKey.currentState?.validate() ?? false) {
+                  final CategoryDTO updatedCategory = CategoryDTO(
+                    id: widget.category?.id,
+                    category: widget._controller!.text,
+                  );
+                  widget.onSave?.call(updatedCategory);
+                }
+              },
             ),
           ],
         ),
