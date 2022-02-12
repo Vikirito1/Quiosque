@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/widgets/cancel_button_widget.dart';
-import '../../../core/widgets/confirm_button_widget.dart';
+import 'cancel_button_widget.dart';
+import 'confirm_button_widget.dart';
 
 class ActionsWidget extends StatelessWidget {
   const ActionsWidget({

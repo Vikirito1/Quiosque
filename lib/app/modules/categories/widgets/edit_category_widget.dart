@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quiosque/app/core/data/dtos/category_dto.dart';
 import 'package:quiosque/app/core/models/category_model.dart';
+import 'package:quiosque/app/core/widgets/actions_widget.dart';
 import 'package:quiosque/app/core/widgets/custom_text_form_field_widget.dart';
-import 'package:quiosque/app/modules/categories/widgets/actions_widget.dart';
 
 class EditCategoryWidget extends StatefulWidget {
   EditCategoryWidget({
