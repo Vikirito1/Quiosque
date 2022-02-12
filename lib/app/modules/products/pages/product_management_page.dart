@@ -51,6 +51,36 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.product?.product ?? 'Adicionar produto'),
+        actions: widget.product != null
+            ? [
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () async {
+                    await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Deseja continuar?'),
+                        content: const Text(
+                            'Este processo é irreversível, portanto não poderá ser desfeito.'),
+                        actions: [
+                          CancelButtonWidget(
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          ConfirmButtonWidget(
+                            onPressed: () {
+                              controller.onDeleteButtonPressed(widget.product!);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                        actionsAlignment: MainAxisAlignment.spaceAround,
+                      ),
+                    );
+                  },
+                ),
+              ]
+            : null,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

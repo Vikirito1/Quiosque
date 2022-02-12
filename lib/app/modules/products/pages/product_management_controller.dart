@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:quiosque/app/core/data/dtos/product_dto.dart';
 import 'package:quiosque/app/core/models/category_model.dart';
+import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/core/stores/categories_store.dart';
 import 'package:quiosque/app/core/stores/products_store.dart';
 
@@ -41,5 +42,9 @@ abstract class _ProductManagementControllerBase with Store {
       await productsStore.updateProduct(productDTO);
     }
     await productsStore.fetchAllProducts();
+  }
+
+  Future<void> onDeleteButtonPressed(ProductModel productModel) async {
+    await productsStore.deleteProduct(productModel.id);
   }
 }
