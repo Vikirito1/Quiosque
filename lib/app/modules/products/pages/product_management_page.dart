@@ -8,7 +8,7 @@ import 'package:quiosque/app/core/widgets/confirmation_dialog_widget.dart';
 import 'package:quiosque/app/core/widgets/custom_text_form_field_widget.dart';
 import 'package:quiosque/app/modules/products/pages/product_management_controller.dart';
 
-import '../../categories/widgets/actions_widget.dart';
+import '../../../core/widgets/actions_widget.dart';
 import '../widgets/category_selection_widget.dart';
 
 class ProductManagementPage extends StatefulWidget {
