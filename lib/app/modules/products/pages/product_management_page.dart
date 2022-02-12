@@ -4,12 +4,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:quiosque/app/core/data/dtos/product_dto.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
-import 'package:quiosque/app/core/widgets/cancel_button_widget.dart';
 import 'package:quiosque/app/core/widgets/confirmation_dialog_widget.dart';
 import 'package:quiosque/app/core/widgets/custom_text_form_field_widget.dart';
 import 'package:quiosque/app/modules/products/pages/product_management_controller.dart';
 
-import '../../../core/widgets/confirm_button_widget.dart';
+import '../widgets/actions_widget.dart';
+import '../widgets/category_selection_widget.dart';
 
 class ProductManagementPage extends StatefulWidget {
   const ProductManagementPage({Key? key, this.product}) : super(key: key);
@@ -114,49 +114,27 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
               ),
               const SizedBox(height: 10.0),
               Observer(
-                builder: (context) => DropdownButtonFormField<int>(
+                builder: (context) => CategorySelectionWidget(
                   value: controller.selectedCategoryId,
-                  items: controller.allCategories
-                      .map(
-                        (category) => DropdownMenuItem(
-                          child: Text(category.category),
-                          value: category.id,
-                        ),
-                      )
-                      .toList(),
-                  onChanged: controller.setSelectedCategoryId,
-                  hint: const Text('Categoria'),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'O produto precisa de uma categoria';
-                    } else {
-                      return null;
-                    }
-                  },
+                  categories: controller.allCategories,
+                  onCategorySelected: controller.setSelectedCategoryId,
                 ),
               ),
               const SizedBox(height: 30.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CancelButtonWidget(
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  ConfirmButtonWidget(
-                    onPressed: () async {
-                      if (formKey.currentState?.validate() ?? false) {
-                        final ProductDTO productDTO = ProductDTO(
-                          id: widget.product?.id,
-                          product: product$.text,
-                          price: formatter.getUnformattedValue().toDouble(),
-                          categoriesId: controller.selectedCategoryId!,
-                        );
-                        await controller.onConfirmButtonPressed(productDTO);
-                        Navigator.pop(context);
-                      }
-                    },
-                  ),
-                ],
+              ActionsWidget(
+                onCancelPressed: () => Navigator.pop(context),
+                onConfirmPressed: () async {
+                  if (formKey.currentState?.validate() ?? false) {
+                    final ProductDTO productDTO = ProductDTO(
+                      id: widget.product?.id,
+                      product: product$.text,
+                      price: formatter.getUnformattedValue().toDouble(),
+                      categoriesId: controller.selectedCategoryId!,
+                    );
+                    await controller.onConfirmButtonPressed(productDTO);
+                    Navigator.pop(context);
+                  }
+                },
               ),
             ],
           ),
