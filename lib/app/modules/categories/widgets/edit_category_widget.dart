@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quiosque/app/core/data/dtos/category_dto.dart';
 import 'package:quiosque/app/core/models/category_model.dart';
 
-class EditCategoryWidget extends StatelessWidget {
+class EditCategoryWidget extends StatefulWidget {
   EditCategoryWidget({
     Key? key,
     this.onSave,
@@ -24,11 +24,23 @@ class EditCategoryWidget extends StatelessWidget {
   late final GlobalKey<FormState> _formKey;
 
   @override
+  State<EditCategoryWidget> createState() => _EditCategoryWidgetState();
+}
+
+class _EditCategoryWidgetState extends State<EditCategoryWidget> {
+  @override
+  void dispose() {
+    widget._controller!.dispose();
+    widget._formKey.currentState?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
     return Form(
-      key: _formKey,
+      key: widget._formKey,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
           16.0,
@@ -41,7 +53,7 @@ class EditCategoryWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              category != null ? 'Editar categoria' : 'Criar categoria',
+              widget.category != null ? 'Editar categoria' : 'Criar categoria',
               style: Theme.of(context).textTheme.headline6,
             ),
             const SizedBox(height: 20.0),
@@ -53,7 +65,7 @@ class EditCategoryWidget extends StatelessWidget {
                   return null;
                 }
               },
-              controller: _controller,
+              controller: widget._controller,
               decoration: const InputDecoration(
                 labelText: 'Categoria',
               ),
@@ -65,7 +77,7 @@ class EditCategoryWidget extends StatelessWidget {
                 SizedBox(
                   width: screenWidth * 0.3,
                   child: OutlinedButton(
-                    onPressed: onCancel,
+                    onPressed: widget.onCancel,
                     child: const Text('Cancelar'),
                   ),
                 ),
@@ -76,12 +88,12 @@ class EditCategoryWidget extends StatelessWidget {
                       elevation: 0.0,
                     ),
                     onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
+                      if (widget._formKey.currentState?.validate() ?? false) {
                         final CategoryDTO updatedCategory = CategoryDTO(
-                          id: category?.id,
-                          category: _controller!.text,
+                          id: widget.category?.id,
+                          category: widget._controller!.text,
                         );
-                        onSave?.call(updatedCategory);
+                        widget.onSave?.call(updatedCategory);
                       }
                     },
                     child: const Text('Salvar'),
