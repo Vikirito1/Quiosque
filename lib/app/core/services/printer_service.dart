@@ -2,13 +2,18 @@ import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:injectable/injectable.dart';
 import 'package:quiosque/app/core/services/printer/i_bluetooth_printer.dart';
 
+import '../models/product_model.dart';
+
 @LazySingleton()
 class PrinterService {
   PrinterService(this._printer);
 
   final IBluetoothPrinter _printer;
 
-  Future<bool> printTicket() async {
+  Future<bool> printReceipt({
+    required List<ProductModel> products,
+    required String tableNumber,
+  }) async {
     List<int> ticket = [];
     // Using default profile
     final profile = await CapabilityProfile.load();
@@ -17,75 +22,72 @@ class PrinterService {
     ticket += generator.reset();
 
     ticket += generator.text(
-      'Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ',
-      styles: const PosStyles(),
+      'Kiosque Tô na Praia',
+      styles: const PosStyles(
+        codeTable: 'CP1252',
+        align: PosAlign.center,
+      ),
     );
-    ticket += generator.text('Special 1: ñÑ àÀ èÈ éÉ üÜ çÇ ôÔ',
-        styles: const PosStyles(codeTable: 'CP1252'));
     ticket += generator.text(
-      'Special 2: blåbærgrød',
-      styles: const PosStyles(codeTable: 'CP1252'),
+      '(22) 99937-6220',
+      styles: const PosStyles(
+        align: PosAlign.center,
+      ),
     );
-
-    ticket += generator.text('Bold text', styles: const PosStyles(bold: true));
-    ticket +=
-        generator.text('Reverse text', styles: const PosStyles(reverse: true));
-    ticket += generator.text('Underlined text',
-        styles: const PosStyles(underline: true), linesAfter: 1);
-    ticket += generator.text('Align left',
-        styles: const PosStyles(align: PosAlign.left));
-    ticket += generator.text('Align center',
-        styles: const PosStyles(align: PosAlign.center));
-    ticket += generator.text('Align right',
-        styles: const PosStyles(align: PosAlign.right), linesAfter: 1);
-
+    ticket += generator.text(
+      '(22) 99937-6220',
+      styles: const PosStyles(
+        align: PosAlign.center,
+      ),
+      linesAfter: 1,
+    );
+    ticket += generator.text(
+      'Data: ${DateTime.now().toLocal()}',
+      linesAfter: 1,
+    );
+    ticket += generator.hr();
+    ticket += generator.row([
+      PosColumn(text: 'Qtd', width: 1),
+      PosColumn(text: 'Descrição', width: 7),
+      PosColumn(text: 'Valor Unit.', width: 2),
+      PosColumn(text: 'Total', width: 2),
+    ]);
+    ticket += generator.hr();
+    for (ProductModel product in products) {
+      ticket += generator.row([
+        PosColumn(text: product.quantity.toString(), width: 1),
+        PosColumn(text: product.product, width: 7),
+        PosColumn(text: product.price.toStringAsFixed(2), width: 2),
+        PosColumn(
+          text: (product.price * product.quantity!).toStringAsFixed(2),
+          width: 2,
+        ),
+      ]);
+    }
+    ticket += generator.hr();
     ticket += generator.row([
       PosColumn(
-        text: 'col3',
-        width: 3,
-        styles: const PosStyles(align: PosAlign.center, underline: true),
-      ),
-      PosColumn(
-        text: 'col6',
+        text: 'Total',
         width: 6,
-        styles: const PosStyles(align: PosAlign.center, underline: true),
+        styles: const PosStyles(
+          bold: true,
+        ),
       ),
       PosColumn(
-        text: 'col3',
-        width: 3,
-        styles: const PosStyles(align: PosAlign.center, underline: true),
+        text: products.fold<double>(0.0, (previousValue, element) {
+          final double subTotal =
+              previousValue + (element.quantity! * element.price);
+          return subTotal;
+        }).toStringAsFixed(2),
+        styles: const PosStyles(
+          align: PosAlign.right,
+          bold: true,
+        ),
       ),
     ]);
-
-    //barcode
-    final List<int> barData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4];
-    ticket += generator.barcode(Barcode.upcA(barData));
-
-    //QR code
-    ticket += generator.qrcode('example.com');
-
-    ticket += generator.text(
-      'Text size 50%',
-      styles: const PosStyles(
-        fontType: PosFontType.fontB,
-      ),
-    );
-    ticket += generator.text(
-      'Text size 100%',
-      styles: const PosStyles(
-        fontType: PosFontType.fontA,
-      ),
-    );
-    ticket += generator.text(
-      'Text size 200%',
-      styles: const PosStyles(
-        height: PosTextSize.size2,
-        width: PosTextSize.size2,
-      ),
-    );
+    ticket += generator.hr();
 
     ticket += generator.feed(2);
-    //bytes += generator.cut();
     return _printer.printTicket(ticket);
   }
 }
