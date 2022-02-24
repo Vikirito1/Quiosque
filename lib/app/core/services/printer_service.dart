@@ -68,10 +68,26 @@ class PrinterService implements IPrinterService {
   void _generateReceiptTableHeader(List<int> receipt, Generator generator) {
     receipt += generator.hr();
     receipt += generator.row([
-      PosColumn(text: 'Qtd', width: 1),
-      PosColumn(text: 'Descrição', width: 7),
-      PosColumn(text: 'Valor Unit.', width: 2),
-      PosColumn(text: 'Total', width: 2),
+      PosColumn(
+        text: 'Qtd',
+        width: 1,
+        styles: const PosStyles(bold: true),
+      ),
+      PosColumn(
+        text: 'Descrição',
+        width: 7,
+        styles: const PosStyles(bold: true),
+      ),
+      PosColumn(
+        text: 'Valor Unit.',
+        width: 2,
+        styles: const PosStyles(bold: true),
+      ),
+      PosColumn(
+        text: 'Total',
+        width: 2,
+        styles: const PosStyles(bold: true),
+      ),
     ]);
     receipt += generator.hr();
   }
