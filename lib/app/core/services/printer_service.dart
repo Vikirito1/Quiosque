@@ -1,60 +1,88 @@
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:injectable/injectable.dart';
+import 'package:quiosque/app/core/services/i_printer_service.dart';
 import 'package:quiosque/app/core/services/printer/i_bluetooth_printer.dart';
 
 import '../models/product_model.dart';
 
-@LazySingleton()
-class PrinterService {
+@LazySingleton(as: IPrinterService)
+class PrinterService implements IPrinterService {
   PrinterService(this._printer);
 
   final IBluetoothPrinter _printer;
 
+  @override
   Future<bool> printReceipt({
     required List<ProductModel> products,
     required String tableNumber,
   }) async {
-    List<int> ticket = [];
-    // Using default profile
+    List<int> receipt = [];
     final profile = await CapabilityProfile.load();
     final generator = Generator(PaperSize.mm58, profile);
-    //bytes += generator.setGlobalFont(PosFontType.fontA);
-    ticket += generator.reset();
 
-    ticket += generator.text(
+    receipt += generator.reset();
+
+    _generateReceiptHeader(receipt, generator, tableNumber);
+    _generateReceiptTableHeader(receipt, generator);
+    _generateReceiptTableContent(receipt, generator, products);
+    _generateReceiptTotalSection(receipt, generator, products);
+
+    receipt += generator.feed(2);
+    return _printer.printTicket(receipt);
+  }
+
+  void _generateReceiptHeader(
+      List<int> receipt, Generator generator, String tableNumber) {
+    receipt += generator.text(
       'Kiosque Tô na Praia',
       styles: const PosStyles(
         codeTable: 'CP1252',
         align: PosAlign.center,
       ),
     );
-    ticket += generator.text(
+    receipt += generator.text(
       '(22) 99937-6220',
       styles: const PosStyles(
         align: PosAlign.center,
       ),
     );
-    ticket += generator.text(
+    receipt += generator.text(
       '(22) 99937-6220',
       styles: const PosStyles(
         align: PosAlign.center,
       ),
       linesAfter: 1,
     );
-    ticket += generator.text(
+    receipt += generator.text(
       'Data: ${DateTime.now().toLocal()}',
       linesAfter: 1,
     );
-    ticket += generator.hr();
-    ticket += generator.row([
+    receipt += generator.text(
+      'Mesa: $tableNumber',
+      styles: const PosStyles(
+        bold: true,
+      ),
+    );
+  }
+
+  void _generateReceiptTableHeader(List<int> receipt, Generator generator) {
+    receipt += generator.hr();
+    receipt += generator.row([
       PosColumn(text: 'Qtd', width: 1),
       PosColumn(text: 'Descrição', width: 7),
       PosColumn(text: 'Valor Unit.', width: 2),
       PosColumn(text: 'Total', width: 2),
     ]);
-    ticket += generator.hr();
+    receipt += generator.hr();
+  }
+
+  void _generateReceiptTableContent(
+    List<int> receipt,
+    Generator generator,
+    List<ProductModel> products,
+  ) {
     for (ProductModel product in products) {
-      ticket += generator.row([
+      receipt += generator.row([
         PosColumn(text: product.quantity.toString(), width: 1),
         PosColumn(text: product.product, width: 7),
         PosColumn(text: product.price.toStringAsFixed(2), width: 2),
@@ -64,8 +92,15 @@ class PrinterService {
         ),
       ]);
     }
-    ticket += generator.hr();
-    ticket += generator.row([
+  }
+
+  void _generateReceiptTotalSection(
+    List<int> receipt,
+    Generator generator,
+    List<ProductModel> products,
+  ) {
+    receipt += generator.hr();
+    receipt += generator.row([
       PosColumn(
         text: 'Total',
         width: 6,
@@ -83,11 +118,9 @@ class PrinterService {
           align: PosAlign.right,
           bold: true,
         ),
+        width: 6,
       ),
     ]);
-    ticket += generator.hr();
-
-    ticket += generator.feed(2);
-    return _printer.printTicket(ticket);
+    receipt += generator.hr();
   }
 }
