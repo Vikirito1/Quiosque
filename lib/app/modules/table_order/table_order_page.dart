@@ -6,6 +6,8 @@ import 'package:quiosque/app/core/data/dtos/table_order_page_dto.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/core/stores/order_products_store.dart';
 import 'package:quiosque/app/core/stores/products_store.dart';
+import 'package:quiosque/app/modules/table_order/models/receipt_page_arguments_model.dart';
+import 'package:quiosque/app/modules/table_order/pages/receipt_page.dart';
 import 'package:quiosque/app/modules/table_order/widgets/add_order_product_widget.dart';
 import 'package:quiosque/app/modules/table_order/widgets/no_order_widget.dart';
 import 'package:quiosque/app/modules/table_order/widgets/order_widget.dart';
@@ -100,6 +102,13 @@ class _TableOrderPageState extends State<TableOrderPage> {
                 onCloseOrder: () {
                   _orderProductsStore.closeOrder();
                 },
+                onGenerateReceipt: () => Navigator.of(context).pushNamed(
+                  ReceiptPage.route,
+                  arguments: ReceiptPageArgumentsModel(
+                    orderProducts: orderProducts,
+                    tableNumber: data.tableNumber,
+                  ),
+                ),
               );
             }
           },

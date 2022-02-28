@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/modules/categories/categories_page.dart';
@@ -6,6 +7,8 @@ import 'package:quiosque/app/modules/home/home_page.dart';
 import 'package:quiosque/app/modules/products/pages/product_management_page.dart';
 import 'package:quiosque/app/modules/products/products_page.dart';
 import 'package:quiosque/app/modules/splash/splash_screen.dart';
+import 'package:quiosque/app/modules/table_order/models/receipt_page_arguments_model.dart';
+import 'package:quiosque/app/modules/table_order/pages/receipt_page.dart';
 import 'package:quiosque/app/modules/table_order/table_order_page.dart';
 
 class AppWidget extends StatelessWidget {
@@ -14,6 +17,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Intl.defaultLocale = 'pt_BR';
+    initializeDateFormatting('pt_BR', null);
     const Color _primaryColor = Color(0xFFF70106);
     return MaterialApp(
       title: 'Kiosque Tô na Praia',
@@ -81,6 +85,15 @@ class AppWidget extends StatelessWidget {
             return const ProductManagementPage();
           }
         },
+        ReceiptPage.route: (context) {
+          final routeArguments = ModalRoute.of(context)!.settings.arguments;
+          final ReceiptPageArgumentsModel receiptPageArgumentsModel =
+              routeArguments as ReceiptPageArgumentsModel;
+          return ReceiptPage(
+            orderProducts: receiptPageArgumentsModel.orderProducts,
+            tableNumber: receiptPageArgumentsModel.tableNumber,
+          );
+        }
       },
     );
   }

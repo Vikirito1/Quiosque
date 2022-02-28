@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:quiosque/app/core/models/category_model.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
+import 'package:quiosque/app/core/utils/formatters.dart';
 import 'package:quiosque/app/core/widgets/menu_drawer_widget.dart';
 import 'package:quiosque/app/modules/products/pages/product_management_page.dart';
 import 'package:quiosque/app/modules/products/products_controller.dart';
@@ -24,7 +25,7 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   void initState() {
     controller = GetIt.I<ProductsController>();
-    moneyFormat = NumberFormat.simpleCurrency(decimalDigits: 2, name: 'BRL');
+    moneyFormat = Formatters.moneyFormatter();
     super.initState();
   }
 

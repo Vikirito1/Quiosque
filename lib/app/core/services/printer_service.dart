@@ -2,7 +2,9 @@ import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:injectable/injectable.dart';
 import 'package:quiosque/app/core/services/i_printer_service.dart';
 import 'package:quiosque/app/core/services/printer/i_bluetooth_printer.dart';
+import 'package:quiosque/app/core/utils/constants.dart';
 
+import '../extensions/date_time_extensions.dart';
 import '../models/product_model.dart';
 
 @LazySingleton(as: IPrinterService)
@@ -14,7 +16,7 @@ class PrinterService implements IPrinterService {
   @override
   Future<bool> printReceipt({
     required List<ProductModel> products,
-    required String tableNumber,
+    required int tableNumber,
   }) async {
     List<int> receipt = [];
     final profile = await CapabilityProfile.load();
@@ -32,29 +34,32 @@ class PrinterService implements IPrinterService {
   }
 
   void _generateReceiptHeader(
-      List<int> receipt, Generator generator, String tableNumber) {
+    List<int> receipt,
+    Generator generator,
+    int tableNumber,
+  ) {
     receipt += generator.text(
-      'Kiosque Tô na Praia',
+      storeName,
       styles: const PosStyles(
         codeTable: 'CP1252',
         align: PosAlign.center,
       ),
     );
     receipt += generator.text(
-      '(22) 99937-6220',
+      storeCnpj,
       styles: const PosStyles(
         align: PosAlign.center,
       ),
     );
     receipt += generator.text(
-      '(22) 99937-6220',
+      storePhoneNumber,
       styles: const PosStyles(
         align: PosAlign.center,
       ),
       linesAfter: 1,
     );
     receipt += generator.text(
-      'Data: ${DateTime.now().toLocal()}',
+      'Data: ${DateTime.now().getDateTime()}',
       linesAfter: 1,
     );
     receipt += generator.text(

@@ -177,3 +177,7 @@ final List<ProductDTO> productData = [
     categoriesId: 5,
   ),
 ];
+
+const String storeName = 'Kioske Tô na Praia';
+const String storePhoneNumber = '(22) 99937-6220';
+const String storeCnpj = 'CNPJ';

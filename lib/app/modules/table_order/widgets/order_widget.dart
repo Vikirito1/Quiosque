@@ -8,12 +8,14 @@ class OrderWidget extends StatelessWidget {
     this.onQuantityChanged,
     required this.total,
     this.onCloseOrder,
+    this.onGenerateReceipt,
   }) : super(key: key);
 
   final List<ProductModel> orderProducts;
   final double total;
   final Function(int productId, int productQuantity)? onQuantityChanged;
   final void Function()? onCloseOrder;
+  final void Function()? onGenerateReceipt;
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +75,18 @@ class OrderWidget extends StatelessWidget {
           },
         ),
       ),
-      ElevatedButton(
-        onPressed: onCloseOrder,
-        child: Text('Fechar Pedido - R\$ ${total.toStringAsFixed(2)}'),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          ElevatedButton(
+            onPressed: onCloseOrder,
+            child: Text('Fechar Pedido - R\$ ${total.toStringAsFixed(2)}'),
+          ),
+          ElevatedButton(
+            onPressed: onGenerateReceipt,
+            child: const Text('Comanda'),
+          ),
+        ],
       ),
     ]);
   }
