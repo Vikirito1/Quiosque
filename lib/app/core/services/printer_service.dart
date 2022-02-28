@@ -1,17 +1,25 @@
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
 import 'package:quiosque/app/core/services/i_printer_service.dart';
 import 'package:quiosque/app/core/services/printer/i_bluetooth_printer.dart';
+import 'package:quiosque/app/core/utils/calculators.dart';
 import 'package:quiosque/app/core/utils/constants.dart';
+import 'package:quiosque/app/core/utils/formatters.dart';
 
 import '../extensions/date_time_extensions.dart';
 import '../models/product_model.dart';
 
 @LazySingleton(as: IPrinterService)
 class PrinterService implements IPrinterService {
-  PrinterService(this._printer);
+  PrinterService(this._printer) {
+    moneyFormatter = Formatters.moneyFormatter();
+    moneyFormatterWithoutSymbol = Formatters.moneyFormatterWithoutSymbol();
+  }
 
   final IBluetoothPrinter _printer;
+  late final NumberFormat moneyFormatter;
+  late final NumberFormat moneyFormatterWithoutSymbol;
 
   @override
   Future<bool> printReceipt({
@@ -106,9 +114,11 @@ class PrinterService implements IPrinterService {
       receipt += generator.row([
         PosColumn(text: product.quantity.toString(), width: 1),
         PosColumn(text: product.product, width: 7),
-        PosColumn(text: product.price.toStringAsFixed(2), width: 2),
         PosColumn(
-          text: (product.price * product.quantity!).toStringAsFixed(2),
+            text: moneyFormatterWithoutSymbol.format(product.price), width: 2),
+        PosColumn(
+          text: moneyFormatterWithoutSymbol
+              .format(product.price * product.quantity!),
           width: 2,
         ),
       ]);
@@ -130,11 +140,8 @@ class PrinterService implements IPrinterService {
         ),
       ),
       PosColumn(
-        text: products.fold<double>(0.0, (previousValue, element) {
-          final double subTotal =
-              previousValue + (element.quantity! * element.price);
-          return subTotal;
-        }).toStringAsFixed(2),
+        text:
+            moneyFormatter.format(Calculators.calculateProductsTotal(products)),
         styles: const PosStyles(
           align: PosAlign.right,
           bold: true,

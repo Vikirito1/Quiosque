@@ -7,7 +7,7 @@ import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/core/stores/order_products_store.dart';
 import 'package:quiosque/app/core/stores/products_store.dart';
 import 'package:quiosque/app/modules/table_order/models/receipt_page_arguments_model.dart';
-import 'package:quiosque/app/modules/table_order/pages/receipt_page.dart';
+import 'package:quiosque/app/modules/table_order/pages/receipt/receipt_page.dart';
 import 'package:quiosque/app/modules/table_order/widgets/add_order_product_widget.dart';
 import 'package:quiosque/app/modules/table_order/widgets/no_order_widget.dart';
 import 'package:quiosque/app/modules/table_order/widgets/order_widget.dart';
