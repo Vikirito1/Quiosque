@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/core/services/i_printer_service.dart';
+import 'package:quiosque/app/core/stores/order_products_store.dart';
 import 'package:quiosque/app/core/utils/formatters.dart';
 import 'package:quiosque/app/modules/table_order/pages/receipt/widgets/receipt_app_bar_widget.dart';
 import 'package:quiosque/app/modules/table_order/pages/receipt/widgets/receipt_header_widget.dart';
@@ -14,13 +14,11 @@ import 'widgets/receipt_total_section_widget.dart';
 class ReceiptPage extends StatefulWidget {
   const ReceiptPage({
     Key? key,
-    required this.orderProducts,
     required this.tableNumber,
   }) : super(key: key);
 
   static const String route = '/receipt';
 
-  final List<ProductModel> orderProducts;
   final int tableNumber;
 
   @override
@@ -32,6 +30,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
   late final NumberFormat moneyFormatterWithoutCurrency;
   late final NumberFormat moneyFormatter;
   late final IPrinterService printerService;
+  late final OrderProductsStore orderProductsStore;
 
   @override
   void initState() {
@@ -39,6 +38,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
     moneyFormatterWithoutCurrency = Formatters.moneyFormatterWithoutSymbol();
     moneyFormatter = Formatters.moneyFormatter();
     printerService = GetIt.I<IPrinterService>();
+    orderProductsStore = GetIt.I<OrderProductsStore>();
     super.initState();
   }
 
@@ -51,8 +51,9 @@ class _ReceiptPageState extends State<ReceiptPage> {
         title: 'Comanda',
         onPrintPressed: () {
           printerService.printReceipt(
-            products: widget.orderProducts,
+            products: orderProductsStore.orderProducts,
             tableNumber: widget.tableNumber,
+            orderTotal: orderProductsStore.tableOrderTotal,
           );
         },
       ),
@@ -74,16 +75,13 @@ class _ReceiptPageState extends State<ReceiptPage> {
               const Divider(thickness: 2),
               const ReceiptTableHeaderWidget(),
               const Divider(thickness: 2),
-              ReceiptTableContentWidget(orderProducts: widget.orderProducts),
+              ReceiptTableContentWidget(
+                orderProducts: orderProductsStore.orderProducts,
+              ),
               const Divider(thickness: 2),
               ReceiptTotalSectionWidget(
                 total: moneyFormatter.format(
-                  widget.orderProducts.fold<double>(0.0,
-                      (previousValue, element) {
-                    final double subTotal =
-                        previousValue + (element.quantity! * element.price);
-                    return subTotal;
-                  }),
+                  orderProductsStore.tableOrderTotal,
                 ),
               ),
             ],

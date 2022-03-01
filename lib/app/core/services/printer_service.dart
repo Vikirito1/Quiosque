@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:quiosque/app/core/services/i_printer_service.dart';
 import 'package:quiosque/app/core/services/printer/i_bluetooth_printer.dart';
-import 'package:quiosque/app/core/utils/calculators.dart';
 import 'package:quiosque/app/core/utils/constants.dart';
 import 'package:quiosque/app/core/utils/formatters.dart';
 
@@ -25,6 +24,7 @@ class PrinterService implements IPrinterService {
   Future<bool> printReceipt({
     required List<ProductModel> products,
     required int tableNumber,
+    required double orderTotal,
   }) async {
     List<int> receipt = [];
     final profile = await CapabilityProfile.load();
@@ -35,7 +35,7 @@ class PrinterService implements IPrinterService {
     _generateReceiptHeader(receipt, generator, tableNumber);
     _generateReceiptTableHeader(receipt, generator);
     _generateReceiptTableContent(receipt, generator, products);
-    _generateReceiptTotalSection(receipt, generator, products);
+    _generateReceiptTotalSection(receipt, generator, orderTotal);
 
     receipt += generator.feed(2);
     return _printer.printTicket(receipt);
@@ -115,7 +115,9 @@ class PrinterService implements IPrinterService {
         PosColumn(text: product.quantity.toString(), width: 1),
         PosColumn(text: product.product, width: 7),
         PosColumn(
-            text: moneyFormatterWithoutSymbol.format(product.price), width: 2),
+          text: moneyFormatterWithoutSymbol.format(product.price),
+          width: 2,
+        ),
         PosColumn(
           text: moneyFormatterWithoutSymbol
               .format(product.price * product.quantity!),
@@ -128,7 +130,7 @@ class PrinterService implements IPrinterService {
   void _generateReceiptTotalSection(
     List<int> receipt,
     Generator generator,
-    List<ProductModel> products,
+    double orderTotal,
   ) {
     receipt += generator.hr();
     receipt += generator.row([
@@ -140,8 +142,7 @@ class PrinterService implements IPrinterService {
         ),
       ),
       PosColumn(
-        text:
-            moneyFormatter.format(Calculators.calculateProductsTotal(products)),
+        text: moneyFormatter.format(orderTotal),
         styles: const PosStyles(
           align: PosAlign.right,
           bold: true,

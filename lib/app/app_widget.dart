@@ -7,7 +7,6 @@ import 'package:quiosque/app/modules/home/home_page.dart';
 import 'package:quiosque/app/modules/products/pages/product_management_page.dart';
 import 'package:quiosque/app/modules/products/products_page.dart';
 import 'package:quiosque/app/modules/splash/splash_screen.dart';
-import 'package:quiosque/app/modules/table_order/models/receipt_page_arguments_model.dart';
 import 'package:quiosque/app/modules/table_order/pages/receipt/receipt_page.dart';
 import 'package:quiosque/app/modules/table_order/table_order_page.dart';
 
@@ -87,12 +86,8 @@ class AppWidget extends StatelessWidget {
         },
         ReceiptPage.route: (context) {
           final routeArguments = ModalRoute.of(context)!.settings.arguments;
-          final ReceiptPageArgumentsModel receiptPageArgumentsModel =
-              routeArguments as ReceiptPageArgumentsModel;
-          return ReceiptPage(
-            orderProducts: receiptPageArgumentsModel.orderProducts,
-            tableNumber: receiptPageArgumentsModel.tableNumber,
-          );
+          final int tableNumber = routeArguments as int;
+          return ReceiptPage(tableNumber: tableNumber);
         }
       },
     );

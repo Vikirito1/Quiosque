@@ -15,6 +15,7 @@ class ReceiptHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const Text(
           storeName,
@@ -29,7 +30,10 @@ class ReceiptHeaderWidget extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 20.0),
-        Text('Data: $dateAndTime'),
+        Text(
+          'Data: $dateAndTime',
+          textAlign: TextAlign.left,
+        ),
         Text('Mesa: $tableNumber'),
       ],
     );

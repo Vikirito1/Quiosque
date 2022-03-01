@@ -7,7 +7,6 @@ import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/core/stores/categories_store.dart';
 import 'package:quiosque/app/core/stores/order_products_store.dart';
 import 'package:quiosque/app/core/stores/products_store.dart';
-import 'package:quiosque/app/modules/table_order/models/receipt_page_arguments_model.dart';
 import 'package:quiosque/app/modules/table_order/pages/receipt/receipt_page.dart';
 import 'package:quiosque/app/modules/table_order/widgets/add_order_product_widget.dart';
 import 'package:quiosque/app/modules/table_order/widgets/no_order_widget.dart';
@@ -39,6 +38,12 @@ class _TableOrderPageState extends State<TableOrderPage> {
       _orderProductsStore.fetchOrderProducts(data.orderId!);
     }
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    GetIt.I.resetLazySingleton<OrderProductsStore>();
+    super.dispose();
   }
 
   @override
@@ -108,10 +113,7 @@ class _TableOrderPageState extends State<TableOrderPage> {
                 },
                 onGenerateReceipt: () => Navigator.of(context).pushNamed(
                   ReceiptPage.route,
-                  arguments: ReceiptPageArgumentsModel(
-                    orderProducts: orderProducts,
-                    tableNumber: data.tableNumber,
-                  ),
+                  arguments: data.tableNumber,
                 ),
               );
             }

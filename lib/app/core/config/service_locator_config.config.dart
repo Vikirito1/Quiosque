@@ -46,7 +46,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       () => _i12.PrinterService(get<_i5.IBluetoothPrinter>()));
   gh.lazySingleton<_i13.IProductRepository>(
       () => _i14.ProductRepository(get<_i3.DbConnection>()));
-  gh.factory<_i15.OrderProductsStore>(() => _i15.OrderProductsStore(
+  gh.lazySingleton<_i15.OrderProductsStore>(() => _i15.OrderProductsStore(
       get<_i13.IProductRepository>(), get<_i9.IOrdersRepository>()));
   gh.lazySingleton<_i16.OrdersStore>(
       () => _i16.OrdersStore(get<_i9.IOrdersRepository>()));

@@ -9,7 +9,7 @@ import 'package:quiosque/app/core/models/product_model.dart';
 
 part 'order_products_store.g.dart';
 
-@Injectable()
+@LazySingleton()
 class OrderProductsStore = _OrderProductsStoreBase with _$OrderProductsStore;
 
 abstract class _OrderProductsStoreBase with Store {
