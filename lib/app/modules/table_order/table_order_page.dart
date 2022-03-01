@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:quiosque/app/core/data/dtos/order_product_dto.dart';
 import 'package:quiosque/app/core/data/dtos/table_order_page_dto.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
+import 'package:quiosque/app/core/stores/categories_store.dart';
 import 'package:quiosque/app/core/stores/order_products_store.dart';
 import 'package:quiosque/app/core/stores/products_store.dart';
 import 'package:quiosque/app/modules/table_order/models/receipt_page_arguments_model.dart';
@@ -24,12 +25,14 @@ class TableOrderPage extends StatefulWidget {
 class _TableOrderPageState extends State<TableOrderPage> {
   late final TableOrderPageDTO data;
   late final OrderProductsStore _orderProductsStore;
+  late final CategoriesStore _categoriesStore;
   late final ProductsStore _productsStore;
 
   @override
   void didChangeDependencies() {
     data = ModalRoute.of(context)?.settings.arguments as TableOrderPageDTO;
     _orderProductsStore = GetIt.I<OrderProductsStore>();
+    _categoriesStore = GetIt.I<CategoriesStore>();
     _productsStore = GetIt.I<ProductsStore>();
     _orderProductsStore.orderId = data.orderId;
     if (data.orderId != null) {
@@ -57,6 +60,7 @@ class _TableOrderPageState extends State<TableOrderPage> {
             builder: (_) => _orderProductsStore.orderId != null
                 ? AddOrderProductWidget(
                     availableProducts: _productsStore.allProducts,
+                    allCategories: _categoriesStore.allCategories,
                     selectedProducts: _orderProductsStore.orderProducts,
                     onProductTap: (product) async {
                       await _orderProductsStore.toggleAddRemoveProduct(
