@@ -6,6 +6,8 @@ import 'package:quiosque/app/core/stores/categories_store.dart';
 import 'package:quiosque/app/core/stores/products_store.dart';
 import 'package:quiosque/app/core/utils/constants.dart';
 
+import '../../core/utils/bluetooth_permission_handler.dart';
+
 @LazySingleton()
 class SplashController {
   SplashController(this._productsStore, this._productRepository,
@@ -26,6 +28,13 @@ class SplashController {
       await _productRepository.createMultipleProducts(productData);
       await _categoriesStore.fetchAllCategories();
       await _productsStore.fetchAllProducts();
+    }
+
+    final bool isBluetoothPermissionGranted =
+        await BluetoothPermissionHandler.checkPermission();
+
+    if (!isBluetoothPermissionGranted) {
+      await BluetoothPermissionHandler.requestBluetoothConnectPermission();
     }
   }
 
