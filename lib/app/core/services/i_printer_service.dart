@@ -6,4 +6,6 @@ abstract class IPrinterService {
     required int tableNumber,
     required double orderTotal,
   });
+
+  Future<bool> get isPrinterReady;
 }

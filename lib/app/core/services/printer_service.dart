@@ -38,6 +38,7 @@ class PrinterService implements IPrinterService {
     _generateReceiptTotalSection(receipt, generator, orderTotal);
 
     receipt += generator.feed(2);
+
     return _printer.printTicket(receipt);
   }
 
@@ -152,4 +153,7 @@ class PrinterService implements IPrinterService {
     ]);
     receipt += generator.hr();
   }
+
+  @override
+  Future<bool> get isPrinterReady => _printer.connectionStatus;
 }
