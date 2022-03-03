@@ -7,15 +7,14 @@
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import '../../modules/categories/categories_controller.dart' as _i24;
+import '../../modules/categories/categories_controller.dart' as _i23;
 import '../../modules/home/home_controller.dart' as _i4;
-import '../../modules/printer_setup/printer_setup_controller.dart' as _i17;
 import '../../modules/products/pages/product_management_controller.dart'
-    as _i21;
-import '../../modules/products/products_controller.dart' as _i22;
-import '../../modules/splash/splash_controller.dart' as _i23;
+    as _i20;
+import '../../modules/products/products_controller.dart' as _i21;
+import '../../modules/splash/splash_controller.dart' as _i22;
 import '../../modules/table_order/pages/receipt/receipt_controller.dart'
-    as _i19;
+    as _i18;
 import '../data/categories/categories_repository.dart' as _i8;
 import '../data/categories/i_categories_repository.dart' as _i7;
 import '../data/orders/i_orders_repository.dart' as _i9;
@@ -27,11 +26,11 @@ import '../services/i_printer_service.dart' as _i11;
 import '../services/printer/bluetooth_printer.dart' as _i6;
 import '../services/printer/i_bluetooth_printer.dart' as _i5;
 import '../services/printer_service.dart' as _i12;
-import '../stores/categories_store.dart' as _i20;
+import '../stores/categories_store.dart' as _i19;
 import '../stores/order_products_store.dart' as _i15;
 import '../stores/orders_store.dart' as _i16;
 import '../stores/products_store.dart'
-    as _i18; // ignore_for_file: unnecessary_lambdas
+    as _i17; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -53,27 +52,25 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i13.IProductRepository>(), get<_i9.IOrdersRepository>()));
   gh.lazySingleton<_i16.OrdersStore>(
       () => _i16.OrdersStore(get<_i9.IOrdersRepository>()));
-  gh.lazySingleton<_i17.PrinterSetupController>(
-      () => _i17.PrinterSetupController());
-  gh.lazySingleton<_i18.ProductsStore>(
-      () => _i18.ProductsStore(get<_i13.IProductRepository>()));
-  gh.lazySingleton<_i19.ReceiptController>(
-      () => _i19.ReceiptController(get<_i11.IPrinterService>()));
-  gh.lazySingleton<_i20.CategoriesStore>(
-      () => _i20.CategoriesStore(get<_i7.ICategoriesRepository>()));
-  gh.factory<_i21.ProductManagementController>(() =>
-      _i21.ProductManagementController(
-          get<_i20.CategoriesStore>(), get<_i18.ProductsStore>()));
-  gh.lazySingleton<_i22.ProductsController>(() => _i22.ProductsController(
-      get<_i18.ProductsStore>(), get<_i20.CategoriesStore>()));
-  gh.lazySingleton<_i23.SplashController>(
-      () => _i23.SplashController(
-          get<_i18.ProductsStore>(),
+  gh.lazySingleton<_i17.ProductsStore>(
+      () => _i17.ProductsStore(get<_i13.IProductRepository>()));
+  gh.lazySingleton<_i18.ReceiptController>(
+      () => _i18.ReceiptController(get<_i11.IPrinterService>()));
+  gh.lazySingleton<_i19.CategoriesStore>(
+      () => _i19.CategoriesStore(get<_i7.ICategoriesRepository>()));
+  gh.factory<_i20.ProductManagementController>(() =>
+      _i20.ProductManagementController(
+          get<_i19.CategoriesStore>(), get<_i17.ProductsStore>()));
+  gh.lazySingleton<_i21.ProductsController>(() => _i21.ProductsController(
+      get<_i17.ProductsStore>(), get<_i19.CategoriesStore>()));
+  gh.lazySingleton<_i22.SplashController>(
+      () => _i22.SplashController(
+          get<_i17.ProductsStore>(),
           get<_i13.IProductRepository>(),
-          get<_i20.CategoriesStore>(),
+          get<_i19.CategoriesStore>(),
           get<_i7.ICategoriesRepository>()),
       dispose: (i) => i.dispose());
-  gh.lazySingleton<_i24.CategoriesController>(
-      () => _i24.CategoriesController(get<_i20.CategoriesStore>()));
+  gh.lazySingleton<_i23.CategoriesController>(
+      () => _i23.CategoriesController(get<_i19.CategoriesStore>()));
   return get;
 }
