@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quiosque/app/core/widgets/menu_drawer_tile_widget.dart';
 import 'package:quiosque/app/modules/categories/categories_page.dart';
 import 'package:quiosque/app/modules/home/home_page.dart';
+import 'package:quiosque/app/modules/printer_setup/printer_setup_page.dart';
 import 'package:quiosque/app/modules/products/products_page.dart';
 
 import 'menu_drawer_header_widget.dart';
@@ -46,6 +47,12 @@ class MenuDrawerWidget extends StatelessWidget {
                   leading: const Icon(Icons.style_outlined),
                   selected: routeName == CategoriesPage.route,
                   routeName: CategoriesPage.route,
+                ),
+                MenuDrawerTileWidget(
+                  title: 'Impressão',
+                  leading: const Icon(Icons.print),
+                  selected: routeName == PrinterSetupPage.route,
+                  routeName: PrinterSetupPage.route,
                 ),
               ],
             ),

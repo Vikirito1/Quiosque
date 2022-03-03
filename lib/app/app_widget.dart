@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:quiosque/app/core/models/product_model.dart';
 import 'package:quiosque/app/modules/categories/categories_page.dart';
 import 'package:quiosque/app/modules/home/home_page.dart';
+import 'package:quiosque/app/modules/printer_setup/printer_setup_page.dart';
 import 'package:quiosque/app/modules/products/pages/product_management_page.dart';
 import 'package:quiosque/app/modules/products/products_page.dart';
 import 'package:quiosque/app/modules/splash/splash_screen.dart';
@@ -88,7 +89,8 @@ class AppWidget extends StatelessWidget {
           final routeArguments = ModalRoute.of(context)!.settings.arguments;
           final int tableNumber = routeArguments as int;
           return ReceiptPage(tableNumber: tableNumber);
-        }
+        },
+        PrinterSetupPage.route: (context) => const PrinterSetupPage(),
       },
     );
   }

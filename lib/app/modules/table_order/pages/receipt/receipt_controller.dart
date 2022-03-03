@@ -36,6 +36,7 @@ abstract class _ReceiptControllerBase with Store {
       );
     } else {
       error = 'Impressora não conectada';
+      // TODO: Implement a printer setup page
     }
   }
 
