@@ -22,12 +22,42 @@ abstract class _PrinterSetupControllerBase with Store {
   @observable
   bool isSearching = false;
 
+  @observable
+  bool isBluetoothEnabled = false;
+
+  @observable
+  bool isConnected = false;
+
+  @observable
+  BluetoothPrinterModel? selectedPrinter;
+
   @action
-  Future<void> setScannedPrinters() async {
+  Future<void> scanPrinters() async {
     isSearching = true;
-    final scanResults = await _printerService.findDevices();
+    final List<BluetoothPrinterModel> scanResults =
+        await _printerService.findDevices();
     scannedPrinters.clear();
     scannedPrinters.addAll(scanResults);
     isSearching = false;
+  }
+
+  @action
+  Future<void> setIsBluetoothEnabled() async {
+    isBluetoothEnabled = await _printerService.isBluetoothEnabled;
+  }
+
+  @action
+  Future<void> onPrinterSelected(BluetoothPrinterModel value) async {
+    final bool connectionResult =
+        await _printerService.connectToPrinter(value.macAddress);
+    isConnected = connectionResult;
+  }
+
+  @action
+  void onRefreshPressed() {
+    setIsBluetoothEnabled();
+    if (isBluetoothEnabled) {
+      scanPrinters();
+    }
   }
 }

@@ -6,4 +6,5 @@ abstract class IBluetoothPrinterService {
   Future<bool> disconnect();
   Future<List<BluetoothPrinterModel>> findDevices();
   Future<bool> get connectionStatus;
+  Future<bool> get isBluetoothEnabled;
 }

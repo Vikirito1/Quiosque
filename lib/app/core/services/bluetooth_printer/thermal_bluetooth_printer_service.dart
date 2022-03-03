@@ -41,4 +41,7 @@ class ThermalBluetoothPrinterService implements IBluetoothPrinterService {
         await PrintBluetoothThermal.writeBytes(ticket);
     return printCommandResult;
   }
+
+  @override
+  Future<bool> get isBluetoothEnabled => PrintBluetoothThermal.bluetoothEnabled;
 }

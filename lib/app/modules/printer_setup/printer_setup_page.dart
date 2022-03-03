@@ -7,9 +7,13 @@ import 'package:quiosque/app/modules/printer_setup/printer_setup_controller.dart
 import '../../core/widgets/menu_drawer_widget.dart';
 
 class PrinterSetupPage extends StatefulWidget {
-  const PrinterSetupPage({Key? key}) : super(key: key);
+  const PrinterSetupPage({
+    Key? key,
+    this.fromSnackbar,
+  }) : super(key: key);
 
   static const String route = '/printer';
+  final bool? fromSnackbar;
 
   @override
   _PrinterSetupPageState createState() => _PrinterSetupPageState();
@@ -21,6 +25,11 @@ class _PrinterSetupPageState extends State<PrinterSetupPage> {
   @override
   void initState() {
     controller = GetIt.I<PrinterSetupController>();
+    controller.setIsBluetoothEnabled().then((_) {
+      if (controller.isBluetoothEnabled) {
+        controller.scanPrinters();
+      }
+    });
     super.initState();
   }
 
@@ -29,32 +38,63 @@ class _PrinterSetupPageState extends State<PrinterSetupPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Configurações de impressão'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: controller.onRefreshPressed,
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
       ),
-      drawer: const MenuDrawerWidget(routeName: PrinterSetupPage.route),
-      body: Observer(
-        builder: (_) {
-          if (controller.isSearching) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (controller.scannedPrinters.isEmpty) {
-            return const Center(
-              child: Text('Nenhuma impressora encontrada'),
-            );
-          } else {
-            return ListView.builder(itemBuilder: (_, index) {
-              final BluetoothPrinterModel printer =
-                  controller.scannedPrinters[index];
-              return ListTile(
-                title: Text(printer.name),
-              );
-            });
-          }
-        },
+      drawer: widget.fromSnackbar == null
+          ? const MenuDrawerWidget(routeName: PrinterSetupPage.route)
+          : null,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              controller.selectedPrinter != null
+                  ? 'Conectado a: ${controller.selectedPrinter?.name}'
+                  : 'Nenhuma impressora contectada',
+            ),
+            Expanded(
+              child: Observer(
+                builder: (_) {
+                  if (!controller.isBluetoothEnabled) {
+                    return const Center(
+                      child: Text(
+                        'Bluetooth desativado. Por favor, ative-o para prosseguir.',
+                      ),
+                    );
+                  } else if (controller.isSearching) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (controller.scannedPrinters.isEmpty) {
+                    return const Center(
+                      child: Text('Nenhuma impressora encontrada'),
+                    );
+                  } else {
+                    return ListView.builder(itemBuilder: (_, index) {
+                      final BluetoothPrinterModel printer =
+                          controller.scannedPrinters[index];
+                      return ListTile(
+                        title: Text(printer.name),
+                        onTap: () => controller.onPrinterSelected(printer),
+                      );
+                    });
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.search),
-        onPressed: controller.setScannedPrinters,
+        onPressed: controller.scanPrinters,
       ),
     );
   }

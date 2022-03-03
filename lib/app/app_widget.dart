@@ -96,7 +96,11 @@ class AppWidget extends StatelessWidget {
           final int tableNumber = routeArguments as int;
           return ReceiptPage(tableNumber: tableNumber);
         },
-        PrinterSetupPage.route: (context) => const PrinterSetupPage(),
+        PrinterSetupPage.route: (context) {
+          final routeArguments = ModalRoute.of(context)?.settings.arguments;
+          final bool? fromSnackbar = routeArguments as bool?;
+          return PrinterSetupPage(fromSnackbar: fromSnackbar);
+        },
       },
     );
   }

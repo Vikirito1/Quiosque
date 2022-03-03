@@ -67,7 +67,11 @@ class _ReceiptPageState extends State<ReceiptPage> {
         backgroundColor: Colors.red,
         action: SnackBarAction(
           label: 'Configurar impressora',
-          onPressed: () => Navigator.pushNamed(context, PrinterSetupPage.route),
+          onPressed: () => Navigator.pushNamed(
+            context,
+            PrinterSetupPage.route,
+            arguments: true,
+          ),
           textColor: Colors.white,
         ),
       );
