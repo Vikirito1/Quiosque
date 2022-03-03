@@ -23,8 +23,9 @@ import '../data/orders/orders_repository.dart' as _i10;
 import '../data/products/i_product_repository.dart' as _i11;
 import '../data/products/product_repository.dart' as _i12;
 import '../database/db_connection.dart' as _i3;
-import '../services/printer/i_bluetooth_printer_service.dart' as _i5;
-import '../services/printer/thermal_bluetooth_printer_service.dart' as _i6;
+import '../services/bluetooth_printer/i_bluetooth_printer_service.dart' as _i5;
+import '../services/bluetooth_printer/thermal_bluetooth_printer_service.dart'
+    as _i6;
 import '../services/receipt_ticket/i_receipt_ticket_service.dart' as _i13;
 import '../services/receipt_ticket/receipt_ticket_service.dart' as _i14;
 import '../stores/categories_store.dart' as _i20;
@@ -49,13 +50,13 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.lazySingleton<_i11.IProductRepository>(
       () => _i12.ProductRepository(get<_i3.DbConnection>()));
   gh.lazySingleton<_i13.IReceiptTicketService>(
-      () => _i14.ReceiptTicketService(get<_i5.IBluetoothPrinterService>()));
+      () => _i14.ReceiptTicketService());
   gh.lazySingleton<_i15.OrderProductsStore>(() => _i15.OrderProductsStore(
       get<_i11.IProductRepository>(), get<_i9.IOrdersRepository>()));
   gh.lazySingleton<_i16.OrdersStore>(
       () => _i16.OrdersStore(get<_i9.IOrdersRepository>()));
   gh.lazySingleton<_i17.PrinterSetupController>(
-      () => _i17.PrinterSetupController());
+      () => _i17.PrinterSetupController(get<_i5.IBluetoothPrinterService>()));
   gh.lazySingleton<_i18.ProductsStore>(
       () => _i18.ProductsStore(get<_i11.IProductRepository>()));
   gh.lazySingleton<_i19.ReceiptController>(() => _i19.ReceiptController(

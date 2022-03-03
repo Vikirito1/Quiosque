@@ -1,7 +1,6 @@
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
-import 'package:quiosque/app/core/services/printer/i_bluetooth_printer_service.dart';
 import 'package:quiosque/app/core/utils/constants.dart';
 import 'package:quiosque/app/core/utils/formatters.dart';
 
@@ -11,12 +10,11 @@ import 'i_receipt_ticket_service.dart';
 
 @LazySingleton(as: IReceiptTicketService)
 class ReceiptTicketService implements IReceiptTicketService {
-  ReceiptTicketService(this._printer) {
+  ReceiptTicketService() {
     moneyFormatter = Formatters.moneyFormatter();
     moneyFormatterWithoutSymbol = Formatters.moneyFormatterWithoutSymbol();
   }
 
-  final IBluetoothPrinterService _printer;
   late final NumberFormat moneyFormatter;
   late final NumberFormat moneyFormatterWithoutSymbol;
 

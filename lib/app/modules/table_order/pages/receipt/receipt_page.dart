@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:quiosque/app/core/stores/order_products_store.dart';
 import 'package:quiosque/app/core/utils/formatters.dart';
+import 'package:quiosque/app/modules/printer_setup/printer_setup_page.dart';
 import 'package:quiosque/app/modules/table_order/pages/receipt/receipt_controller.dart';
 import 'package:quiosque/app/modules/table_order/pages/receipt/widgets/receipt_app_bar_widget.dart';
 import 'package:quiosque/app/modules/table_order/pages/receipt/widgets/receipt_header_widget.dart';
@@ -64,6 +65,11 @@ class _ReceiptPageState extends State<ReceiptPage> {
       final SnackBar errorSnackbar = SnackBar(
         content: Text(controller.error!),
         backgroundColor: Colors.red,
+        action: SnackBarAction(
+          label: 'Configurar impressora',
+          onPressed: () => Navigator.pushNamed(context, PrinterSetupPage.route),
+          textColor: Colors.white,
+        ),
       );
       scaffoldMessengerKey.currentState?.showSnackBar(errorSnackbar);
     }

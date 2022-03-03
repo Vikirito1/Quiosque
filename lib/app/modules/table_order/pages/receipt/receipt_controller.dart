@@ -1,8 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
-import 'package:quiosque/app/core/services/printer/i_bluetooth_printer_service.dart';
 
 import '../../../../core/models/product_model.dart';
+import '../../../../core/services/bluetooth_printer/i_bluetooth_printer_service.dart';
 import '../../../../core/services/receipt_ticket/i_receipt_ticket_service.dart';
 
 part 'receipt_controller.g.dart';
@@ -31,11 +31,12 @@ abstract class _ReceiptControllerBase with Store {
 
     await _getPrinterStatus();
     if (isPrinterReady) {
-      _receiptService.generateReceiptTicket(
+      final List<int> receipt = await _receiptService.generateReceiptTicket(
         products: orderProducts,
         tableNumber: tableNumber,
         orderTotal: orderTotal,
       );
+      _printerService.printTicket(receipt);
     } else {
       error = 'Impressora não conectada';
       // TODO: Implement a printer setup page

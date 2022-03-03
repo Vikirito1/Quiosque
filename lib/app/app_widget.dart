@@ -66,6 +66,12 @@ class AppWidget extends StatelessWidget {
           selectedTileColor: _primaryColor,
           selectedColor: _primaryColor,
         ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: _primaryColor,
+        ),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: _primaryColor,
+        ),
       ),
       initialRoute: SplashScreen.route,
       routes: {
