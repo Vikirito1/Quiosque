@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
-import 'package:quiosque/app/core/services/printer/i_bluetooth_printer.dart';
+import 'package:quiosque/app/core/services/printer/i_bluetooth_printer_service.dart';
 
 import '../../../../core/models/product_model.dart';
 import '../../../../core/services/receipt_ticket/i_receipt_ticket_service.dart';
@@ -14,7 +14,7 @@ abstract class _ReceiptControllerBase with Store {
   _ReceiptControllerBase(this._receiptService, this._printerService);
 
   final IReceiptTicketService _receiptService;
-  final IBluetoothPrinter _printerService;
+  final IBluetoothPrinterService _printerService;
 
   @observable
   bool isPrinterReady = false;

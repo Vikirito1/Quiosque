@@ -1,7 +1,9 @@
+import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 
 part 'printer_setup_controller.g.dart';
 
+@LazySingleton()
 class PrinterSetupController = _PrinterSetupControllerBase
     with _$PrinterSetupController;
 

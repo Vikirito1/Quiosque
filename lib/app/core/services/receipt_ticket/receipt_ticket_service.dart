@@ -1,7 +1,7 @@
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
-import 'package:quiosque/app/core/services/printer/i_bluetooth_printer.dart';
+import 'package:quiosque/app/core/services/printer/i_bluetooth_printer_service.dart';
 import 'package:quiosque/app/core/utils/constants.dart';
 import 'package:quiosque/app/core/utils/formatters.dart';
 
@@ -16,7 +16,7 @@ class ReceiptTicketService implements IReceiptTicketService {
     moneyFormatterWithoutSymbol = Formatters.moneyFormatterWithoutSymbol();
   }
 
-  final IBluetoothPrinter _printer;
+  final IBluetoothPrinterService _printer;
   late final NumberFormat moneyFormatter;
   late final NumberFormat moneyFormatterWithoutSymbol;
 

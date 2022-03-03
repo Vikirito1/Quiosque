@@ -2,10 +2,10 @@ import 'package:injectable/injectable.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:quiosque/app/core/models/bluetooth_printer_model.dart';
 
-import './i_bluetooth_printer.dart';
+import 'i_bluetooth_printer_service.dart';
 
-@LazySingleton(as: IBluetoothPrinter)
-class ThermalBluetoothPrinter implements IBluetoothPrinter {
+@LazySingleton(as: IBluetoothPrinterService)
+class ThermalBluetoothPrinterService implements IBluetoothPrinterService {
   @override
   Future<List<BluetoothPrinterModel>> findDevices() async {
     final List<BluetoothInfo> foundDevices =
