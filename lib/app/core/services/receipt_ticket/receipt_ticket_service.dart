@@ -1,17 +1,17 @@
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
-import 'package:quiosque/app/core/services/i_printer_service.dart';
 import 'package:quiosque/app/core/services/printer/i_bluetooth_printer.dart';
 import 'package:quiosque/app/core/utils/constants.dart';
 import 'package:quiosque/app/core/utils/formatters.dart';
 
-import '../extensions/date_time_extensions.dart';
-import '../models/product_model.dart';
+import '../../extensions/date_time_extensions.dart';
+import '../../models/product_model.dart';
+import 'i_receipt_ticket_service.dart';
 
-@LazySingleton(as: IPrinterService)
-class PrinterService implements IPrinterService {
-  PrinterService(this._printer) {
+@LazySingleton(as: IReceiptTicketService)
+class ReceiptTicketService implements IReceiptTicketService {
+  ReceiptTicketService(this._printer) {
     moneyFormatter = Formatters.moneyFormatter();
     moneyFormatterWithoutSymbol = Formatters.moneyFormatterWithoutSymbol();
   }
@@ -21,7 +21,7 @@ class PrinterService implements IPrinterService {
   late final NumberFormat moneyFormatterWithoutSymbol;
 
   @override
-  Future<bool> printReceipt({
+  Future<List<int>> generateReceiptTicket({
     required List<ProductModel> products,
     required int tableNumber,
     required double orderTotal,
@@ -39,7 +39,7 @@ class PrinterService implements IPrinterService {
 
     receipt += generator.feed(2);
 
-    return _printer.printTicket(receipt);
+    return receipt;
   }
 
   void _generateReceiptHeader(
@@ -153,7 +153,4 @@ class PrinterService implements IPrinterService {
     ]);
     receipt += generator.hr();
   }
-
-  @override
-  Future<bool> get isPrinterReady => _printer.connectionStatus;
 }

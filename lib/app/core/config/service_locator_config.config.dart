@@ -19,13 +19,13 @@ import '../data/categories/categories_repository.dart' as _i8;
 import '../data/categories/i_categories_repository.dart' as _i7;
 import '../data/orders/i_orders_repository.dart' as _i9;
 import '../data/orders/orders_repository.dart' as _i10;
-import '../data/products/i_product_repository.dart' as _i13;
-import '../data/products/product_repository.dart' as _i14;
+import '../data/products/i_product_repository.dart' as _i11;
+import '../data/products/product_repository.dart' as _i12;
 import '../database/db_connection.dart' as _i3;
-import '../services/i_printer_service.dart' as _i11;
 import '../services/printer/bluetooth_printer.dart' as _i6;
 import '../services/printer/i_bluetooth_printer.dart' as _i5;
-import '../services/printer_service.dart' as _i12;
+import '../services/receipt_ticket/i_receipt_ticket_service.dart' as _i13;
+import '../services/receipt_ticket/receipt_ticket_service.dart' as _i14;
 import '../stores/categories_store.dart' as _i19;
 import '../stores/order_products_store.dart' as _i15;
 import '../stores/orders_store.dart' as _i16;
@@ -44,18 +44,18 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       () => _i8.CategoriesRepository(get<_i3.DbConnection>()));
   gh.lazySingleton<_i9.IOrdersRepository>(
       () => _i10.OrdersRepository(get<_i3.DbConnection>()));
-  gh.lazySingleton<_i11.IPrinterService>(
-      () => _i12.PrinterService(get<_i5.IBluetoothPrinter>()));
-  gh.lazySingleton<_i13.IProductRepository>(
-      () => _i14.ProductRepository(get<_i3.DbConnection>()));
+  gh.lazySingleton<_i11.IProductRepository>(
+      () => _i12.ProductRepository(get<_i3.DbConnection>()));
+  gh.lazySingleton<_i13.IReceiptTicketService>(
+      () => _i14.ReceiptTicketService(get<_i5.IBluetoothPrinter>()));
   gh.lazySingleton<_i15.OrderProductsStore>(() => _i15.OrderProductsStore(
-      get<_i13.IProductRepository>(), get<_i9.IOrdersRepository>()));
+      get<_i11.IProductRepository>(), get<_i9.IOrdersRepository>()));
   gh.lazySingleton<_i16.OrdersStore>(
       () => _i16.OrdersStore(get<_i9.IOrdersRepository>()));
   gh.lazySingleton<_i17.ProductsStore>(
-      () => _i17.ProductsStore(get<_i13.IProductRepository>()));
-  gh.lazySingleton<_i18.ReceiptController>(
-      () => _i18.ReceiptController(get<_i11.IPrinterService>()));
+      () => _i17.ProductsStore(get<_i11.IProductRepository>()));
+  gh.lazySingleton<_i18.ReceiptController>(() => _i18.ReceiptController(
+      get<_i13.IReceiptTicketService>(), get<_i5.IBluetoothPrinter>()));
   gh.lazySingleton<_i19.CategoriesStore>(
       () => _i19.CategoriesStore(get<_i7.ICategoriesRepository>()));
   gh.factory<_i20.ProductManagementController>(() =>
@@ -66,7 +66,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.lazySingleton<_i22.SplashController>(
       () => _i22.SplashController(
           get<_i17.ProductsStore>(),
-          get<_i13.IProductRepository>(),
+          get<_i11.IProductRepository>(),
           get<_i19.CategoriesStore>(),
           get<_i7.ICategoriesRepository>()),
       dispose: (i) => i.dispose());

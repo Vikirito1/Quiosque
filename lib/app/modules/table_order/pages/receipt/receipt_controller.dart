@@ -1,8 +1,9 @@
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+import 'package:quiosque/app/core/services/printer/i_bluetooth_printer.dart';
 
 import '../../../../core/models/product_model.dart';
-import '../../../../core/services/i_printer_service.dart';
+import '../../../../core/services/receipt_ticket/i_receipt_ticket_service.dart';
 
 part 'receipt_controller.g.dart';
 
@@ -10,9 +11,10 @@ part 'receipt_controller.g.dart';
 class ReceiptController = _ReceiptControllerBase with _$ReceiptController;
 
 abstract class _ReceiptControllerBase with Store {
-  _ReceiptControllerBase(this._printerService);
+  _ReceiptControllerBase(this._receiptService, this._printerService);
 
-  final IPrinterService _printerService;
+  final IReceiptTicketService _receiptService;
+  final IBluetoothPrinter _printerService;
 
   @observable
   bool isPrinterReady = false;
@@ -29,7 +31,7 @@ abstract class _ReceiptControllerBase with Store {
 
     await _getPrinterStatus();
     if (isPrinterReady) {
-      _printerService.printReceipt(
+      _receiptService.generateReceiptTicket(
         products: orderProducts,
         tableNumber: tableNumber,
         orderTotal: orderTotal,
@@ -42,6 +44,6 @@ abstract class _ReceiptControllerBase with Store {
 
   @action
   Future<void> _getPrinterStatus() async {
-    isPrinterReady = await _printerService.isPrinterReady;
+    isPrinterReady = await _printerService.connectionStatus;
   }
 }

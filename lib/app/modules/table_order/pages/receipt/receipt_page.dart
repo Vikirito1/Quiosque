@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
-import 'package:quiosque/app/core/services/i_printer_service.dart';
 import 'package:quiosque/app/core/stores/order_products_store.dart';
 import 'package:quiosque/app/core/utils/formatters.dart';
 import 'package:quiosque/app/modules/table_order/pages/receipt/receipt_controller.dart';
@@ -10,6 +9,7 @@ import 'package:quiosque/app/modules/table_order/pages/receipt/widgets/receipt_a
 import 'package:quiosque/app/modules/table_order/pages/receipt/widgets/receipt_header_widget.dart';
 import 'package:quiosque/app/modules/table_order/pages/receipt/widgets/receipt_table_content_widget.dart';
 
+import '../../../../core/services/receipt_ticket/i_receipt_ticket_service.dart';
 import 'widgets/receipt_table_header_widget.dart';
 import 'widgets/receipt_total_section_widget.dart';
 
@@ -31,7 +31,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
   late final DateFormat dateFormatter;
   late final NumberFormat moneyFormatterWithoutCurrency;
   late final NumberFormat moneyFormatter;
-  late final IPrinterService printerService;
+  late final IReceiptTicketService printerService;
   late final OrderProductsStore orderProductsStore;
   late final ReceiptController controller;
   late final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
@@ -42,7 +42,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
     dateFormatter = Formatters.dateFormatter();
     moneyFormatterWithoutCurrency = Formatters.moneyFormatterWithoutSymbol();
     moneyFormatter = Formatters.moneyFormatter();
-    printerService = GetIt.I<IPrinterService>();
+    printerService = GetIt.I<IReceiptTicketService>();
     orderProductsStore = GetIt.I<OrderProductsStore>();
     controller = GetIt.I<ReceiptController>();
     scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
