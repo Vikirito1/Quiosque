@@ -115,6 +115,15 @@ mixin _$PrinterSetupController on _PrinterSetupControllerBase, Store {
         .run(() => super.onPrinterSelected(value));
   }
 
+  final _$checkLastUsedPrinterAsyncAction =
+      AsyncAction('_PrinterSetupControllerBase.checkLastUsedPrinter');
+
+  @override
+  Future<void> checkLastUsedPrinter() {
+    return _$checkLastUsedPrinterAsyncAction
+        .run(() => super.checkLastUsedPrinter());
+  }
+
   final _$_PrinterSetupControllerBaseActionController =
       ActionController(name: '_PrinterSetupControllerBase');
 

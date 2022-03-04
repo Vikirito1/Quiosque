@@ -39,7 +39,6 @@ abstract class _ReceiptControllerBase with Store {
       _printerService.printTicket(receipt);
     } else {
       error = 'Impressora não conectada';
-      // TODO: Implement autoconnect and navigate to printer settings if not able to connect
     }
   }
 

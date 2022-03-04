@@ -63,4 +63,24 @@ abstract class _PrinterSetupControllerBase with Store {
       scanPrinters();
     }
   }
+
+  @action
+  Future<void> checkLastUsedPrinter() async {
+    final BluetoothPrinterModel? lastUsedPrinter =
+        await _localStorageService.getLastUsedPrinter();
+    if (lastUsedPrinter != null) {
+      selectedPrinter = lastUsedPrinter;
+      isConnected = await _printerService.connectionStatus;
+    }
+  }
+
+  Future<void> onInitState() async {
+    await setIsBluetoothEnabled();
+    if (isBluetoothEnabled) {
+      isSearching = true;
+      await checkLastUsedPrinter();
+      await scanPrinters();
+      isSearching = false;
+    }
+  }
 }

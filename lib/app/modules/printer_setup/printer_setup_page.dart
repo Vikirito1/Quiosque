@@ -25,11 +25,7 @@ class _PrinterSetupPageState extends State<PrinterSetupPage> {
   @override
   void initState() {
     controller = GetIt.I<PrinterSetupController>();
-    controller.setIsBluetoothEnabled().then((_) {
-      if (controller.isBluetoothEnabled) {
-        controller.scanPrinters();
-      }
-    });
+    controller.onInitState();
     super.initState();
   }
 
