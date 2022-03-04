@@ -60,8 +60,9 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i13.IProductRepository>(), get<_i11.IOrdersRepository>()));
   gh.lazySingleton<_i18.OrdersStore>(
       () => _i18.OrdersStore(get<_i11.IOrdersRepository>()));
-  gh.lazySingleton<_i19.PrinterSetupController>(
-      () => _i19.PrinterSetupController(get<_i5.IBluetoothPrinterService>()));
+  gh.lazySingleton<_i19.PrinterSetupController>(() =>
+      _i19.PrinterSetupController(get<_i5.IBluetoothPrinterService>(),
+          get<_i9.ILocalStorageService>()));
   gh.lazySingleton<_i20.ProductsStore>(
       () => _i20.ProductsStore(get<_i13.IProductRepository>()));
   gh.lazySingleton<_i21.ReceiptController>(() => _i21.ReceiptController(
@@ -78,7 +79,9 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
           get<_i20.ProductsStore>(),
           get<_i13.IProductRepository>(),
           get<_i22.CategoriesStore>(),
-          get<_i7.ICategoriesRepository>()),
+          get<_i7.ICategoriesRepository>(),
+          get<_i9.ILocalStorageService>(),
+          get<_i5.IBluetoothPrinterService>()),
       dispose: (i) => i.dispose());
   gh.lazySingleton<_i26.CategoriesController>(
       () => _i26.CategoriesController(get<_i22.CategoriesStore>()));

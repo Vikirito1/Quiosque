@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:quiosque/app/core/models/bluetooth_printer_model.dart';
+import 'package:quiosque/app/core/services/local_storage/i_local_storage_service.dart';
 
 import '../../core/services/bluetooth_printer/i_bluetooth_printer_service.dart';
 
@@ -11,9 +12,10 @@ class PrinterSetupController = _PrinterSetupControllerBase
     with _$PrinterSetupController;
 
 abstract class _PrinterSetupControllerBase with Store {
-  _PrinterSetupControllerBase(this._printerService);
+  _PrinterSetupControllerBase(this._printerService, this._localStorageService);
 
   final IBluetoothPrinterService _printerService;
+  final ILocalStorageService _localStorageService;
 
   @observable
   ObservableList<BluetoothPrinterModel> scannedPrinters =
@@ -50,6 +52,7 @@ abstract class _PrinterSetupControllerBase with Store {
   Future<void> onPrinterSelected(BluetoothPrinterModel value) async {
     final bool connectionResult =
         await _printerService.connectToPrinter(value.macAddress);
+    await _localStorageService.storeLastUsedPrinter(value);
     isConnected = connectionResult;
   }
 
