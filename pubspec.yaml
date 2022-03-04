@@ -45,6 +45,7 @@ dependencies:
   esc_pos_utils: ^1.1.0
   print_bluetooth_thermal: ^1.0.2
   permission_handler: ^9.2.0
+  shared_preferences: ^2.0.13
 
 dev_dependencies:
   flutter_test:
