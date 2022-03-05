@@ -53,7 +53,7 @@ class _PrinterSetupPageState extends State<PrinterSetupPage> {
             Text(
               controller.selectedPrinter != null
                   ? 'Conectado a: ${controller.selectedPrinter?.name}'
-                  : 'Nenhuma impressora contectada',
+                  : 'Nenhuma impressora conectada',
             ),
             Expanded(
               child: Observer(
@@ -73,14 +73,17 @@ class _PrinterSetupPageState extends State<PrinterSetupPage> {
                       child: Text('Nenhuma impressora encontrada'),
                     );
                   } else {
-                    return ListView.builder(itemBuilder: (_, index) {
-                      final BluetoothPrinterModel printer =
-                          controller.scannedPrinters[index];
-                      return ListTile(
-                        title: Text(printer.name),
-                        onTap: () => controller.onPrinterSelected(printer),
-                      );
-                    });
+                    return ListView.builder(
+                      itemCount: controller.scannedPrinters.length,
+                      itemBuilder: (_, index) {
+                        final BluetoothPrinterModel printer =
+                            controller.scannedPrinters[index];
+                        return ListTile(
+                          title: Text(printer.name),
+                          onTap: () => controller.onPrinterSelected(printer),
+                        );
+                      },
+                    );
                   }
                 },
               ),
