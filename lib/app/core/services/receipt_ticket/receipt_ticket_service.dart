@@ -18,6 +18,12 @@ class ReceiptTicketService implements IReceiptTicketService {
   late final NumberFormat moneyFormatter;
   late final NumberFormat moneyFormatterWithoutSymbol;
 
+  static const int _quantityColumnWidth = 1;
+  static const int _descriptionColumnWidth = 5;
+  static const int _unitaryPriceColumnWidth = 3;
+  static const int _subtotalPriceColumnWidth = 3;
+  static const int _totalPriceColumnWidth = 6;
+
   @override
   Future<List<int>> generateReceiptTicket({
     required List<ProductModel> products,
@@ -61,31 +67,24 @@ class ReceiptTicketService implements IReceiptTicketService {
     receipt += generator.row([
       PosColumn(
         text: 'Qtd',
-        width: 1,
-        styles: const PosStyles(
-          bold: true,
-        ),
+        width: _quantityColumnWidth,
+        styles: const PosStyles(bold: true, align: PosAlign.left),
       ),
       PosColumn(
         text: 'Descrição',
-        width: 5,
+        width: _descriptionColumnWidth,
         styles: const PosStyles(
-          bold: true,
-        ),
+            bold: true, codeTable: 'CP1252', align: PosAlign.left),
       ),
       PosColumn(
         text: 'Valor Unit.',
-        width: 3,
-        styles: const PosStyles(
-          bold: true,
-        ),
+        width: _unitaryPriceColumnWidth,
+        styles: const PosStyles(bold: true, align: PosAlign.left),
       ),
       PosColumn(
         text: 'Total',
-        width: 3,
-        styles: const PosStyles(
-          bold: true,
-        ),
+        width: _subtotalPriceColumnWidth,
+        styles: const PosStyles(bold: true, align: PosAlign.left),
       ),
     ]);
     receipt += generator.hr();
@@ -94,22 +93,29 @@ class ReceiptTicketService implements IReceiptTicketService {
 
     for (ProductModel product in products) {
       receipt += generator.row([
-        PosColumn(text: product.quantity.toString(), width: 1),
+        PosColumn(
+          text: product.quantity.toString(),
+          width: _quantityColumnWidth,
+          styles: const PosStyles(align: PosAlign.left),
+        ),
         PosColumn(
           text: product.product,
-          width: 5,
+          width: _descriptionColumnWidth,
           styles: const PosStyles(
             codeTable: 'CP1252',
+            align: PosAlign.left,
           ),
         ),
         PosColumn(
           text: moneyFormatterWithoutSymbol.format(product.price),
-          width: 3,
+          width: _unitaryPriceColumnWidth,
+          styles: const PosStyles(align: PosAlign.left),
         ),
         PosColumn(
           text: moneyFormatterWithoutSymbol
               .format(product.price * product.quantity!),
-          width: 3,
+          width: _subtotalPriceColumnWidth,
+          styles: const PosStyles(align: PosAlign.left),
         ),
       ]);
     }
@@ -120,7 +126,7 @@ class ReceiptTicketService implements IReceiptTicketService {
     receipt += generator.row([
       PosColumn(
         text: 'Total',
-        width: 6,
+        width: _totalPriceColumnWidth,
         styles: const PosStyles(
           bold: true,
         ),
@@ -131,7 +137,7 @@ class ReceiptTicketService implements IReceiptTicketService {
           align: PosAlign.right,
           bold: true,
         ),
-        width: 6,
+        width: _totalPriceColumnWidth,
       ),
     ]);
     receipt += generator.hr();
