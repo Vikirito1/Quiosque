@@ -77,7 +77,7 @@ class ReceiptTicketService implements IReceiptTicketService {
             bold: true, codeTable: 'CP1252', align: PosAlign.left),
       ),
       PosColumn(
-        text: 'Valor Unit.',
+        text: 'Unit',
         width: _unitaryPriceColumnWidth,
         styles: const PosStyles(bold: true, align: PosAlign.left),
       ),
@@ -125,7 +125,7 @@ class ReceiptTicketService implements IReceiptTicketService {
     receipt += generator.hr();
     receipt += generator.row([
       PosColumn(
-        text: 'Total',
+        text: 'Total a pagar',
         width: _totalPriceColumnWidth,
         styles: const PosStyles(
           bold: true,
