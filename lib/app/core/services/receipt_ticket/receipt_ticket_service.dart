@@ -30,21 +30,7 @@ class ReceiptTicketService implements IReceiptTicketService {
 
     receipt += generator.reset();
 
-    _generateReceiptHeader(receipt, generator, tableNumber);
-    _generateReceiptTableHeader(receipt, generator);
-    _generateReceiptTableContent(receipt, generator, products);
-    _generateReceiptTotalSection(receipt, generator, orderTotal);
-
-    receipt += generator.feed(2);
-
-    return receipt;
-  }
-
-  void _generateReceiptHeader(
-    List<int> receipt,
-    Generator generator,
-    int tableNumber,
-  ) {
+    //_generateReceiptHeader(receipt, generator, tableNumber);
     receipt += generator.text(
       storeName,
       styles: const PosStyles(
@@ -75,62 +61,61 @@ class ReceiptTicketService implements IReceiptTicketService {
         bold: true,
       ),
     );
-  }
 
-  void _generateReceiptTableHeader(List<int> receipt, Generator generator) {
+    // _generateReceiptTableHeader(receipt, generator);
     receipt += generator.hr();
     receipt += generator.row([
       PosColumn(
         text: 'Qtd',
         width: 1,
-        styles: const PosStyles(bold: true),
+        styles: const PosStyles(
+          bold: true,
+        ),
       ),
       PosColumn(
         text: 'Descrição',
-        width: 7,
-        styles: const PosStyles(bold: true),
+        width: 5,
+        styles: const PosStyles(
+          bold: true,
+        ),
       ),
       PosColumn(
         text: 'Valor Unit.',
-        width: 2,
-        styles: const PosStyles(bold: true),
+        width: 3,
+        styles: const PosStyles(
+          bold: true,
+        ),
       ),
       PosColumn(
         text: 'Total',
-        width: 2,
-        styles: const PosStyles(bold: true),
+        width: 3,
+        styles: const PosStyles(
+          bold: true,
+        ),
       ),
     ]);
     receipt += generator.hr();
-  }
 
-  void _generateReceiptTableContent(
-    List<int> receipt,
-    Generator generator,
-    List<ProductModel> products,
-  ) {
+    // _generateReceiptTableContent(receipt, generator, products);
+
     for (ProductModel product in products) {
       receipt += generator.row([
         PosColumn(text: product.quantity.toString(), width: 1),
-        PosColumn(text: product.product, width: 7),
+        PosColumn(text: product.product, width: 5),
         PosColumn(
           text: moneyFormatterWithoutSymbol.format(product.price),
-          width: 2,
+          width: 3,
         ),
         PosColumn(
           text: moneyFormatterWithoutSymbol
               .format(product.price * product.quantity!),
-          width: 2,
+          width: 3,
         ),
       ]);
     }
-  }
 
-  void _generateReceiptTotalSection(
-    List<int> receipt,
-    Generator generator,
-    double orderTotal,
-  ) {
+    // _generateReceiptTotalSection(receipt, generator, orderTotal);
+
     receipt += generator.hr();
     receipt += generator.row([
       PosColumn(
@@ -150,5 +135,121 @@ class ReceiptTicketService implements IReceiptTicketService {
       ),
     ]);
     receipt += generator.hr();
+
+    receipt += generator.feed(2);
+
+    return receipt;
   }
+
+  // void _generateReceiptHeader(
+  //   List<int> receipt,
+  //   Generator generator,
+  //   int tableNumber,
+  // ) {
+  //   receipt += generator.text(
+  //     storeName,
+  //     styles: const PosStyles(
+  //       codeTable: 'CP1252',
+  //       align: PosAlign.center,
+  //     ),
+  //   );
+  //   receipt += generator.text(
+  //     storeCnpj,
+  //     styles: const PosStyles(
+  //       align: PosAlign.center,
+  //     ),
+  //   );
+  //   receipt += generator.text(
+  //     storePhoneNumber,
+  //     styles: const PosStyles(
+  //       align: PosAlign.center,
+  //     ),
+  //     linesAfter: 1,
+  //   );
+  //   receipt += generator.text(
+  //     'Data: ${DateTime.now().getDateTime()}',
+  //     linesAfter: 1,
+  //   );
+  //   receipt += generator.text(
+  //     'Mesa: $tableNumber',
+  //     styles: const PosStyles(
+  //       bold: true,
+  //     ),
+  //   );
+  // }
+
+  // void _generateReceiptTableHeader(List<int> receipt, Generator generator) {
+  //   receipt += generator.hr();
+  //   receipt += generator.row([
+  //     PosColumn(
+  //       text: 'Qtd',
+  //       width: 1,
+  //       styles: const PosStyles(bold: true),
+  //     ),
+  //     PosColumn(
+  //       text: 'Descrição',
+  //       width: 7,
+  //       styles: const PosStyles(bold: true),
+  //     ),
+  //     PosColumn(
+  //       text: 'Valor Unit.',
+  //       width: 2,
+  //       styles: const PosStyles(bold: true),
+  //     ),
+  //     PosColumn(
+  //       text: 'Total',
+  //       width: 2,
+  //       styles: const PosStyles(bold: true),
+  //     ),
+  //   ]);
+  //   receipt += generator.hr();
+  // }
+
+  // void _generateReceiptTableContent(
+  //   List<int> receipt,
+  //   Generator generator,
+  //   List<ProductModel> products,
+  // ) {
+  //   for (ProductModel product in products) {
+  //     receipt += generator.row([
+  //       PosColumn(text: product.quantity.toString(), width: 1),
+  //       PosColumn(text: product.product, width: 7),
+  //       PosColumn(
+  //         text: moneyFormatterWithoutSymbol.format(product.price),
+  //         width: 2,
+  //       ),
+  //       PosColumn(
+  //         text: moneyFormatterWithoutSymbol
+  //             .format(product.price * product.quantity!),
+  //         width: 2,
+  //       ),
+  //     ]);
+  //   }
+  // }
+
+  // void _generateReceiptTotalSection(
+  //   List<int> receipt,
+  //   Generator generator,
+  //   double orderTotal,
+  // ) {
+  //   receipt += generator.hr();
+  //   receipt += generator.row([
+  //     PosColumn(
+  //       text: 'Total',
+  //       width: 6,
+  //       styles: const PosStyles(
+  //         bold: true,
+  //       ),
+  //     ),
+  //     PosColumn(
+  //       text: moneyFormatter.format(orderTotal),
+  //       styles: const PosStyles(
+  //         align: PosAlign.right,
+  //         bold: true,
+  //       ),
+  //       width: 6,
+  //     ),
+  //   ]);
+  //   receipt += generator.hr();
+  // }
 }
