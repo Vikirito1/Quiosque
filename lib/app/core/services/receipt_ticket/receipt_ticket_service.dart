@@ -39,12 +39,6 @@ class ReceiptTicketService implements IReceiptTicketService {
       ),
     );
     receipt += generator.text(
-      storeCnpj,
-      styles: const PosStyles(
-        align: PosAlign.center,
-      ),
-    );
-    receipt += generator.text(
       storePhoneNumber,
       styles: const PosStyles(
         align: PosAlign.center,
@@ -101,7 +95,13 @@ class ReceiptTicketService implements IReceiptTicketService {
     for (ProductModel product in products) {
       receipt += generator.row([
         PosColumn(text: product.quantity.toString(), width: 1),
-        PosColumn(text: product.product, width: 5),
+        PosColumn(
+          text: product.product,
+          width: 5,
+          styles: const PosStyles(
+            codeTable: 'CP1252',
+          ),
+        ),
         PosColumn(
           text: moneyFormatterWithoutSymbol.format(product.price),
           width: 3,
